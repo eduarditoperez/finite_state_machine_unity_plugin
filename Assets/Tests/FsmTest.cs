@@ -5,6 +5,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Fsm.State;
+using Fsm.State.Transition;
 
 public class FsmTest
 {
@@ -202,5 +203,65 @@ public class FsmTest
 
             Assert.AreEqual(1, counterState.Counter);
         }
+
+        [Test]
+        public void Update_For_A_Non_Started_Fsm_Leaves_ActiveState_Null()
+        {
+            CounterFsmState counterState = new CounterFsmState("CounterState");
+
+            FiniteStateMachine fsm = new FiniteStateMachine(counterState);
+
+            fsm.Update();
+
+            Assert.IsNull(fsm.ActiveState);
+        }
+
+        [Test]
+        public void Update_Returns_State_With_Valid_Transition_For_A_FSM_With_2_States()
+        {
+            CounterFsmState initialState = new CounterFsmState("InitialState");
+            NoopFsmState targetState = new NoopFsmState("TargetState");
+
+            FsmTransition initialToTargetTransition = new AlwaysValidTransition(targetState);
+            initialState.AddTransition(initialToTargetTransition);
+
+            FsmTransition targetToSelfTransition = new AlwaysValidTransition(targetState);
+            targetState.AddTransition(targetToSelfTransition);
+
+            FiniteStateMachine fsm = new FiniteStateMachine(initialState);
+            fsm.AddState(targetState);
+
+            fsm.Start();
+            fsm.Update();
+            Assert.AreEqual(1, initialState.Counter);
+            Assert.True(fsm.ActiveState.IsEquals(targetState));
+        }
+
+        [Test]
+        public void Update_Returns_State_With_Valid_Transition_For_A_Fsm_With_3_States()
+        {
+            CounterFsmState initialState = new CounterFsmState("InitialState");
+            NoopFsmState stateA = new NoopFsmState("StateA");
+            NoopFsmState stateB = new NoopFsmState("StateB");
+
+            FsmTransition toStateATransition = new AlwaysInvalidTransition(stateA);
+            initialState.AddTransition(toStateATransition);
+
+            FsmTransition toStateBTransition = new AlwaysValidTransition(stateB);
+            initialState.AddTransition(toStateBTransition);
+
+            FiniteStateMachine fsm = new FiniteStateMachine(initialState);
+            fsm.AddState(stateA);
+            fsm.AddState(stateB);
+
+            fsm.Start();
+            fsm.Update();
+            
+            Assert.True(fsm.ActiveState.IsEquals(stateB));
+        }
     }
+
+    // TODO: add a test that changes the active state,
+    // for this we need a fsm with a valid transition to 
+    // another state
 }
