@@ -2,6 +2,8 @@ using Fsm.Core;
 using NUnit.Framework;
 using Fsm.State;
 using Fsm.State.Transition;
+using UnityEngine;
+using System;
 
 public class FsmTest
 {
@@ -34,7 +36,7 @@ public class FsmTest
         [Test]
         public void Constructor_With_Initial_State_Set_InitialState()
         {
-            FsmStateBase initialState = new NoopFsmState("initialState");
+            FsmStateBase initialState = GivenANoopInitializedState("initialState");
             FiniteStateMachine fsm = new FiniteStateMachine(initialState);
 
             Assert.IsEmpty(fsm.States);
@@ -50,7 +52,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmStateBase state = new NoopFsmState("SomeState");
+            FsmStateBase state = GivenANoopInitializedState("SomeState");
 
             fsm.AddState(state);
 
@@ -62,7 +64,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmStateBase state = new NoopFsmState("SomeState");
+            FsmStateBase state = GivenANoopInitializedState("SomeState");
 
             fsm.AddState(state);
             fsm.AddState(state);
@@ -75,8 +77,8 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmStateBase stateA = new NoopFsmState("StateA");
-            FsmStateBase stateB = new NoopFsmState("StateB");
+            FsmStateBase stateA = GivenANoopInitializedState("StateA");
+            FsmStateBase stateB = GivenANoopInitializedState("StateB");
 
             fsm.AddState(stateA);
             fsm.AddState(stateB);
@@ -92,7 +94,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmStateBase state = new NoopFsmState("SomeState");
+            FsmStateBase state = GivenANoopInitializedState("SomeState");
 
             fsm.RemoveState(state);
 
@@ -104,7 +106,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmStateBase state = new NoopFsmState("SomeState");
+            FsmStateBase state = GivenANoopInitializedState("SomeState");
             fsm.AddState(state);
             fsm.RemoveState(state);
 
@@ -116,9 +118,9 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmStateBase stateA = new NoopFsmState("StateA");
-            FsmStateBase stateB = new NoopFsmState("StateB");
-            FsmStateBase stateC = new NoopFsmState("StateC");
+            FsmStateBase stateA = GivenANoopInitializedState("StateA");
+            FsmStateBase stateB = GivenANoopInitializedState("StateB");
+            FsmStateBase stateC = GivenANoopInitializedState("StateC");
 
             fsm.AddState(stateA);
             fsm.AddState(stateB);
@@ -145,8 +147,8 @@ public class FsmTest
         [Test]
         public void Start_Set_ActiveState()
         {
-            FsmStateBase stateA = new NoopFsmState("StateA");
-            FsmStateBase stateB = new NoopFsmState("StateB");
+            FsmStateBase stateA = GivenANoopInitializedState("StateA");
+            FsmStateBase stateB = GivenANoopInitializedState("StateB");
 
             FiniteStateMachine fsm = new FiniteStateMachine(stateA);
 
@@ -171,8 +173,8 @@ public class FsmTest
         [Test]
         public void Stop_Set_ActiveState_To_Null()
         {
-            FsmStateBase stateA = new NoopFsmState("StateA");
-            FsmStateBase stateB = new NoopFsmState("StateB");
+            FsmStateBase stateA = GivenANoopInitializedState("StateA");
+            FsmStateBase stateB = GivenANoopInitializedState("StateB");
 
             FiniteStateMachine fsm = new FiniteStateMachine(stateA);
 
@@ -186,9 +188,21 @@ public class FsmTest
     public class UpdateTests
     {
         [Test]
+        public void Update_Initial_State_Not_Initialized_Throws_Exception()
+        {
+            CounterFsmState counterState = GivenACounterState("CounterState");
+
+            FiniteStateMachine fsm = new FiniteStateMachine(counterState);
+
+            fsm.Start();
+            Assert.Throws<NullReferenceException>( () => fsm.Update());
+
+        }
+
+        [Test]
         public void Update_Executes_ActiveState()
         {
-            CounterFsmState counterState = new CounterFsmState("CounterState");
+            CounterFsmState counterState = GivenACounterInitializedState("CounterState");
 
             FiniteStateMachine fsm = new FiniteStateMachine(counterState);
 
@@ -203,7 +217,7 @@ public class FsmTest
         [Test]
         public void Update_For_A_Non_Started_Fsm_Leaves_ActiveState_Null()
         {
-            CounterFsmState counterState = new CounterFsmState("CounterState");
+            CounterFsmState counterState = GivenACounterInitializedState("CounterState");
 
             FiniteStateMachine fsm = new FiniteStateMachine(counterState);
 
@@ -215,13 +229,13 @@ public class FsmTest
         [Test]
         public void Update_Returns_State_With_Valid_Transition_For_A_FSM_With_2_States()
         {
-            CounterFsmState initialState = new CounterFsmState("InitialState");
-            NoopFsmState targetState = new NoopFsmState("TargetState");
+            CounterFsmState initialState = GivenACounterInitializedState("InitialState");
+            NoopFsmState targetState = GivenANoopInitializedState("TargetState");
 
-            FsmTransition initialToTargetTransition = new AlwaysValidTransition(targetState);
+            FsmTransition initialToTargetTransition = GivenAnAlwaysValidTransition(targetState);
             initialState.AddTransition(initialToTargetTransition);
 
-            FsmTransition targetToSelfTransition = new AlwaysValidTransition(targetState);
+            FsmTransition targetToSelfTransition = GivenAnAlwaysValidTransition(targetState);
             targetState.AddTransition(targetToSelfTransition);
 
             FiniteStateMachine fsm = new FiniteStateMachine(initialState);
@@ -236,14 +250,14 @@ public class FsmTest
         [Test]
         public void Update_Returns_State_With_Valid_Transition_For_A_Fsm_With_3_States()
         {
-            CounterFsmState initialState = new CounterFsmState("InitialState");
-            NoopFsmState stateA = new NoopFsmState("StateA");
-            NoopFsmState stateB = new NoopFsmState("StateB");
+            CounterFsmState initialState = GivenACounterInitializedState("InitialState");
+            NoopFsmState stateA = GivenANoopInitializedState("StateA");
+            NoopFsmState stateB = GivenANoopInitializedState("StateB");
 
-            FsmTransition toStateATransition = new AlwaysInvalidTransition(stateA);
+            FsmTransition toStateATransition = GivenAnAlwaysInvalidTransition(stateA);
             initialState.AddTransition(toStateATransition);
 
-            FsmTransition toStateBTransition = new AlwaysValidTransition(stateB);
+            FsmTransition toStateBTransition = GivenAnAlwaysValidTransition(stateB);
             initialState.AddTransition(toStateBTransition);
 
             FiniteStateMachine fsm = new FiniteStateMachine(initialState);
@@ -257,7 +271,38 @@ public class FsmTest
         }
     }
 
-    // TODO: add a test that changes the active state,
-    // for this we need a fsm with a valid transition to 
-    // another state
+    private static NoopFsmState GivenANoopInitializedState(string stateName)
+    {
+        NoopFsmState state = ScriptableObject.CreateInstance<NoopFsmState>();
+        state.Init(stateName);
+        return state;
+    }
+
+    private static CounterFsmState GivenACounterState(string stateName)
+    {
+        CounterFsmState state = ScriptableObject.CreateInstance<CounterFsmState>();
+        state.StateName = stateName;
+        return state;
+    }
+
+    private static CounterFsmState GivenACounterInitializedState(string stateName)
+    {
+        CounterFsmState state = ScriptableObject.CreateInstance<CounterFsmState>();
+        state.Init(stateName);
+        return state;
+    }
+
+    private static FsmTransition GivenAnAlwaysValidTransition(FsmStateBase state)
+    {
+        AlwaysValidTransition transition = ScriptableObject.CreateInstance<AlwaysValidTransition>();
+        transition.Init(state);
+        return transition;
+    }
+
+    private static FsmTransition GivenAnAlwaysInvalidTransition(FsmStateBase state)
+    {
+        AlwaysInvalidTransition transition = ScriptableObject.CreateInstance<AlwaysInvalidTransition>();
+        transition.Init(state);
+        return transition;
+    }
 }

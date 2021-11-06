@@ -11,7 +11,7 @@ namespace Fsm.State
 
         public int Counter => _counter;
 
-        public CounterFsmState(string stateName) : base(stateName) {}
+        //public CounterFsmState(string stateName) : base(stateName) {}
 
         public override FsmStateBase Update()
         {

@@ -10,7 +10,7 @@ namespace Fsm.State
         public string StateName;
         public List<FsmTransition> Transitions;
 
-        public FsmStateBase(string stateName)
+        public void Init(string stateName)
         {
             StateName = stateName;
             Transitions = new List<FsmTransition>();

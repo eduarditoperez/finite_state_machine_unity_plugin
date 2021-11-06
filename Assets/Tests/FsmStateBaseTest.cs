@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using Fsm.State.Transition;
 using Fsm.State;
+using UnityEngine;
 
 public class FsmStateBaseTest
 {
@@ -18,7 +19,7 @@ public class FsmStateBaseTest
             // Given
             string stateName = "startState";
             // When
-            FsmStateBase startState = new FsmStateBase(stateName);
+            FsmStateBase startState = GivenAnFsmStateBase(stateName);
             // Then
             Assert.AreEqual(stateName, startState.StateName);
         }
@@ -26,9 +27,8 @@ public class FsmStateBaseTest
         [Test]
         public void Constructor_Creates_State_With_Empty_Transitions()
         {
-            FsmStateBase startState = new FsmStateBase(string.Empty);
-
-            Assert.IsEmpty(startState.Transitions);
+            FsmStateBase startState = GivenAnFsmStateBase(string.Empty);
+            Assert.AreEqual(0, startState.Transitions.Count);
         }
     }
 
@@ -40,7 +40,7 @@ public class FsmStateBaseTest
             FsmStateBase fsmState = GivenANoopState(StateName1);
             FsmTransition transition = GivenANoopTransition(TransitionName1, fsmState);
 
-            FsmStateBase startState = new FsmStateBase(string.Empty);
+            FsmStateBase startState = GivenAnFsmStateBase(string.Empty);
             startState.AddTransition(transition);
 
             Assert.IsNotEmpty(startState.Transitions);
@@ -53,7 +53,7 @@ public class FsmStateBaseTest
             FsmStateBase fsmState = GivenANoopState(StateName1);
             FsmTransition transition = GivenANoopTransition(TransitionName1, fsmState);
 
-            FsmStateBase startState = new FsmStateBase(string.Empty);
+            FsmStateBase startState = GivenAnFsmStateBase(string.Empty);
 
             startState.AddTransition(transition);
             startState.AddTransition(transition);
@@ -71,7 +71,7 @@ public class FsmStateBaseTest
             FsmTransition transition1 = GivenANoopTransition(TransitionName1, fsmState1);
             FsmTransition transition2 = GivenANoopTransition(TransitionName2, fsmState2);
 
-            FsmStateBase startState = new FsmStateBase(string.Empty);
+            FsmStateBase startState = GivenAnFsmStateBase(string.Empty);
 
             startState.AddTransition(transition1);
             startState.AddTransition(transition2);
@@ -88,7 +88,7 @@ public class FsmStateBaseTest
             FsmTransition transition1 = GivenANoopTransition(TransitionName1, fsmState1);
             FsmTransition transition2 = GivenANoopTransition(TransitionName2, fsmState1);
 
-            FsmStateBase startState = new FsmStateBase(string.Empty);
+            FsmStateBase startState = GivenAnFsmStateBase(string.Empty);
 
             startState.AddTransition(transition1);
             startState.AddTransition(transition2);
@@ -100,7 +100,8 @@ public class FsmStateBaseTest
         [Test]
         public void AddTransition_Adding_Transition_To_Self_Adds_The_Transition()
         {
-            FsmStateBase startState = new FsmStateBase("baseState");
+            FsmStateBase startState = GivenAnFsmStateBase("baseState");
+  
             FsmTransition transition1 = GivenANoopTransition(TransitionName1, startState);
 
             startState.AddTransition(transition1);
@@ -192,28 +193,65 @@ public class FsmStateBaseTest
         }
     }
 
-    private static FsmTransition GivenANoopTransition(string transitionName, FsmStateBase fsmState)
+    public class InitTests
     {
-        return new NoopTransition(transitionName, fsmState);
-    }
+        [Test]
+        public void Init_Set_StateName_To_EmptyString()
+        {
+            FsmStateBase fsmStateBase = GivenAnFsmStateBase(string.Empty);
 
-    private static FsmStateBase GivenANoopState(string stateName)
-    {
-        return new NoopFsmState(stateName);
+            fsmStateBase.Init(string.Empty);
+
+            Assert.True(string.IsNullOrEmpty(fsmStateBase.StateName));
+
+        }
+
+        [Test]
+        public void Init_Set_StateName_To_The_Name_Used_As_Argument()
+        {
+            const string stateName = "This is the name";
+            FsmStateBase fsmStateBase = GivenAnFsmStateBase(string.Empty);
+
+            fsmStateBase.Init(stateName);
+
+            Assert.AreEqual(stateName, fsmStateBase.StateName);
+        }
     }
 
     private static FsmStateBase GivenAnFsmStateBase(string stateName)
     {
-        return new FsmStateBase(stateName);
+        FsmStateBase fsmStateBase = ScriptableObject.CreateInstance<FsmStateBase>();
+        fsmStateBase.Init(stateName);
+        return fsmStateBase;
+    }
+
+    private static NoopTransition GivenANoopTransition(string transitionName, FsmStateBase fsmState)
+    {
+        NoopTransition noopTransition = ScriptableObject.CreateInstance<NoopTransition>();
+
+        noopTransition.Init(transitionName, fsmState);
+
+        return noopTransition;
+    }
+
+    private static FsmStateBase GivenANoopState(string stateName)
+    {
+        NoopFsmState state = ScriptableObject.CreateInstance<NoopFsmState>();
+        state.StateName = stateName;
+        return state;
     }
 
     private static FsmTransition GivenAnAlwaysValidTransition(FsmStateBase state)
     {
-        return new AlwaysValidTransition(state);
+        AlwaysValidTransition transition = ScriptableObject.CreateInstance<AlwaysValidTransition>();
+        transition.Init(state);
+        return transition;
     }
 
     private static FsmTransition GivenAnAlwaysInvalidTransition(FsmStateBase state)
     {
-        return new AlwaysInvalidTransition(state);
+        AlwaysInvalidTransition transition = ScriptableObject.CreateInstance<AlwaysInvalidTransition>();
+        transition.Init(state);
+        return transition;
     }
 }

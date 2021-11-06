@@ -16,7 +16,7 @@ namespace Fsm.State.Transition
         public FsmStateBase NextState;
         public bool IsValid;
 
-        public FsmTransition(string transitionName, FsmStateBase nextState, bool isValid)
+        public virtual void Init(string transitionName, FsmStateBase nextState, bool isValid)
         {
             TransitionName = transitionName;
             NextState = nextState;

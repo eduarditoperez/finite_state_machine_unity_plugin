@@ -5,7 +5,7 @@
     /// </summary>
     public class NoopFsmState : FsmStateBase
     {
-        public NoopFsmState(string stateName) : base(stateName) {}
+        //public NoopFsmState(string stateName) : base(stateName) {}
 
         public override void Enter() {}
 
