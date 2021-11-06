@@ -11,7 +11,7 @@
 
         public override void Exit() {}
 
-        public override FsmState Update()
+        public override FsmStateBase Update()
         {
             return this;
         }

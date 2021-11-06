@@ -2,18 +2,18 @@
 {
     public class AlwaysValidTransition : FsmTransition
     {
-        public string TransitionName => typeof(AlwaysValidTransition).Name;
+        public override string TransitionName => typeof(AlwaysValidTransition).Name;
 
-        public FsmState NextState => _nextState;
+        public override FsmStateBase NextState => _nextState;
 
-        private FsmState _nextState;
+        private FsmStateBase _nextState;
 
-        public AlwaysValidTransition(FsmState nextState)
+        public AlwaysValidTransition(FsmStateBase nextState)
         {
             _nextState = nextState;
         }
 
-        public bool IsValid() => true;
+        public override bool IsValid() => true;
 
     }
 }

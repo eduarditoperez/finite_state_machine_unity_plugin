@@ -1,5 +1,6 @@
 using Fsm.State;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fsm.Core
 {
@@ -17,42 +18,39 @@ namespace Fsm.Core
     ///         - Call activeState.Enter()
     ///     - If a valid transition is not found, then call _activeState.Update()
     /// </summary>
-    [System.Serializable]
-    public class FiniteStateMachine
+    [CreateAssetMenu()]
+    public class FiniteStateMachine : ScriptableObject
     {
-        public List<FsmState> States => _states;
-        public FsmState ActiveState => _activeState;
-        public FsmState InitialState => _initialState;
+        public List<FsmStateBase> States;
 
-        private List<FsmState> _states;
-        private FsmState _initialState;
-        private FsmState _activeState;
+        public FsmStateBase ActiveState;
+        public FsmStateBase InitialState;
 
         public FiniteStateMachine()
         {
-            _states = new List<FsmState>();
+            States = new List<FsmStateBase>();
         }
 
-        public FiniteStateMachine(FsmState initialState) : this()
+        public FiniteStateMachine(FsmStateBase initialState) : this()
         {
-            _initialState = initialState;
+            InitialState = initialState;
         }
 
-        public void AddState(FsmState state)
+        public void AddState(FsmStateBase state)
         {
             if (HasState(state))
             {
                 return;
             }
-            _states.Add(state);
+            States.Add(state);
         }
 
-        private bool HasState(FsmState state)
+        private bool HasState(FsmStateBase state)
         {
             bool hasTheState = false;
-            for (int i = 0; i < _states.Count && !hasTheState; i++)
+            for (int i = 0; i < States.Count && !hasTheState; i++)
             {
-                if (_states[i].StateName == state.StateName)
+                if (States[i].StateName == state.StateName)
                 {
                     hasTheState = true;
                 }
@@ -60,42 +58,43 @@ namespace Fsm.Core
             return hasTheState;
         }
 
-        public void RemoveState(FsmState state)
+        public void RemoveState(FsmStateBase state)
         {
             if (HasState(state))
             {
                 int stateIndex = 0;
                 bool stateFound = false;
-                for (int i = 0; i < _states.Count && !stateFound; i++)
+                for (int i = 0; i < States.Count && !stateFound; i++)
                 {
-                    if (_states[i].StateName == state.StateName)
+                    if (States[i].StateName == state.StateName)
                     {
                         stateFound = true;
                         stateIndex = i;
                     }
                 }
+
                 if (stateFound)
                 {
-                    _states.RemoveAt(stateIndex);
+                    States.RemoveAt(stateIndex);
                 }
             }
         }
 
         public void Start()
         {
-            _activeState = _initialState;
+            ActiveState = InitialState;
         }
 
         public void Stop()
         {
-            _activeState = null;
+            ActiveState = null;
         }
 
         public void Update()
         {
-            if (_activeState != null)
+            if (ActiveState != null)
             {
-                _activeState = _activeState.Update();
+                ActiveState = ActiveState.Update();
             }
         }
 

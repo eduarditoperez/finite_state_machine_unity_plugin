@@ -1,9 +1,5 @@
 using Fsm.Core;
-using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 using Fsm.State;
 using Fsm.State.Transition;
 
@@ -38,7 +34,7 @@ public class FsmTest
         [Test]
         public void Constructor_With_Initial_State_Set_InitialState()
         {
-            FsmState initialState = new NoopFsmState("initialState");
+            FsmStateBase initialState = new NoopFsmState("initialState");
             FiniteStateMachine fsm = new FiniteStateMachine(initialState);
 
             Assert.IsEmpty(fsm.States);
@@ -54,7 +50,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState state = new NoopFsmState("SomeState");
+            FsmStateBase state = new NoopFsmState("SomeState");
 
             fsm.AddState(state);
 
@@ -66,7 +62,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState state = new NoopFsmState("SomeState");
+            FsmStateBase state = new NoopFsmState("SomeState");
 
             fsm.AddState(state);
             fsm.AddState(state);
@@ -79,8 +75,8 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState stateA = new NoopFsmState("StateA");
-            FsmState stateB = new NoopFsmState("StateB");
+            FsmStateBase stateA = new NoopFsmState("StateA");
+            FsmStateBase stateB = new NoopFsmState("StateB");
 
             fsm.AddState(stateA);
             fsm.AddState(stateB);
@@ -96,7 +92,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState state = new NoopFsmState("SomeState");
+            FsmStateBase state = new NoopFsmState("SomeState");
 
             fsm.RemoveState(state);
 
@@ -108,7 +104,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState state = new NoopFsmState("SomeState");
+            FsmStateBase state = new NoopFsmState("SomeState");
             fsm.AddState(state);
             fsm.RemoveState(state);
 
@@ -120,9 +116,9 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState stateA = new NoopFsmState("StateA");
-            FsmState stateB = new NoopFsmState("StateB");
-            FsmState stateC = new NoopFsmState("StateC");
+            FsmStateBase stateA = new NoopFsmState("StateA");
+            FsmStateBase stateB = new NoopFsmState("StateB");
+            FsmStateBase stateC = new NoopFsmState("StateC");
 
             fsm.AddState(stateA);
             fsm.AddState(stateB);
@@ -149,8 +145,8 @@ public class FsmTest
         [Test]
         public void Start_Set_ActiveState()
         {
-            FsmState stateA = new NoopFsmState("StateA");
-            FsmState stateB = new NoopFsmState("StateB");
+            FsmStateBase stateA = new NoopFsmState("StateA");
+            FsmStateBase stateB = new NoopFsmState("StateB");
 
             FiniteStateMachine fsm = new FiniteStateMachine(stateA);
 
@@ -175,8 +171,8 @@ public class FsmTest
         [Test]
         public void Stop_Set_ActiveState_To_Null()
         {
-            FsmState stateA = new NoopFsmState("StateA");
-            FsmState stateB = new NoopFsmState("StateB");
+            FsmStateBase stateA = new NoopFsmState("StateA");
+            FsmStateBase stateB = new NoopFsmState("StateB");
 
             FiniteStateMachine fsm = new FiniteStateMachine(stateA);
 

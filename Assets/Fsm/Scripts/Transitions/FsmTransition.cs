@@ -1,13 +1,15 @@
-﻿namespace Fsm.State.Transition
+﻿using UnityEngine;
+
+namespace Fsm.State.Transition
 {
     /// <summary>
     /// This interface is used to determine if a transition
     /// can be done.
     /// </summary>
-    public interface FsmTransition
+    public abstract class FsmTransition : ScriptableObject
     {
-        bool IsValid();
-        string TransitionName { get; }
-        FsmState NextState { get; }
+        public abstract bool IsValid();
+        public abstract string TransitionName { get; }
+        public abstract FsmStateBase NextState { get; } 
     }
 }

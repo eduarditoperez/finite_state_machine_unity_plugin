@@ -1,23 +1,22 @@
 ﻿using Fsm.State.Transition;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fsm.State
 {
-    public class FsmStateBase : FsmState
+    [CreateAssetMenu()]
+    public class FsmStateBase : ScriptableObject
     {
-        private string _stateName;
-        private List<FsmTransition> _transitions;
-
-        public string StateName => _stateName;
-        public List<FsmTransition> Transitions => _transitions;
+        public string StateName;
+        public List<FsmTransition> Transitions;
 
         public FsmStateBase(string stateName)
         {
-            _stateName = stateName;
-            _transitions = new List<FsmTransition>();
+            StateName = stateName;
+            Transitions = new List<FsmTransition>();
         }
 
-        public void AddTransition(FsmTransition transition)
+        public virtual void AddTransition(FsmTransition transition)
         {
             if (HasTransition(transition))
                 return;
@@ -32,18 +31,17 @@ namespace Fsm.State
 
             for (int i = 0; i < transitionCount && !hasTransition; i++)
             {
-                hasTransition = _transitions[i].TransitionName == transition.TransitionName
-                    || _transitions[i].NextState.IsEquals(transition.NextState);
+                hasTransition = Transitions[i].TransitionName == transition.TransitionName
+                    || Transitions[i].NextState.IsEquals(transition.NextState);
             }
 
             return hasTransition;
         }
 
         public virtual void Enter() {}
-
         public virtual void Exit() {}
 
-        public virtual FsmState Update()
+        public virtual FsmStateBase Update()
         {
             if (TryGetValidTransition(out FsmTransition validTransition))
             {
@@ -66,7 +64,7 @@ namespace Fsm.State
             return transition != null;
         }
 
-        public bool IsEquals(FsmState state)
+        public bool IsEquals(FsmStateBase state)
         {
             if (state == null)
             {

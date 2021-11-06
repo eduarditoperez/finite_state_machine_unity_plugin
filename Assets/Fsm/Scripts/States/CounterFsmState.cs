@@ -13,7 +13,7 @@ namespace Fsm.State
 
         public CounterFsmState(string stateName) : base(stateName) {}
 
-        public override FsmState Update()
+        public override FsmStateBase Update()
         {
             try
             {
