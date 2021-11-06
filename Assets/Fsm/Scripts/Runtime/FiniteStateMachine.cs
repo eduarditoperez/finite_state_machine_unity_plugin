@@ -1,6 +1,7 @@
 using Fsm.State;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace Fsm.Core
 {
@@ -26,16 +27,13 @@ namespace Fsm.Core
         public FsmStateBase ActiveState;
         public FsmStateBase InitialState;
 
-        public FiniteStateMachine()
+        public void Init(FsmStateBase initialState)
         {
+            InitialState = initialState;
             States = new List<FsmStateBase>();
         }
 
-        public FiniteStateMachine(FsmStateBase initialState) : this()
-        {
-            InitialState = initialState;
-        }
-
+        // TODO: replace for TryAdd
         public void AddState(FsmStateBase state)
         {
             if (HasState(state))
@@ -58,6 +56,7 @@ namespace Fsm.Core
             return hasTheState;
         }
 
+        // TODO: replace for TryRemove
         public void RemoveState(FsmStateBase state)
         {
             if (HasState(state))
@@ -75,7 +74,12 @@ namespace Fsm.Core
 
                 if (stateFound)
                 {
+                    FsmStateBase stateToRemove = States[stateIndex];
                     States.RemoveAt(stateIndex);
+
+                    // TODO: add an interface to deal with this
+                    AssetDatabase.RemoveObjectFromAsset(stateToRemove);
+                    AssetDatabase.SaveAssets();
                 }
             }
         }
@@ -98,5 +102,23 @@ namespace Fsm.Core
             }
         }
 
+        // TODO: not tested
+        public FsmStateBase CreateAndAddState(System.Type stateType)
+        {
+            FsmStateBase state = ScriptableObject.CreateInstance(stateType) as FsmStateBase;
+            state.name = stateType.Name;
+            state.Guid = GUID.Generate().ToString();
+
+            AddState(state);
+
+            // TODO: add an interface for this
+            AssetDatabase.AddObjectToAsset(state, this);
+            AssetDatabase.SaveAssets();
+
+            return state;
+        }
+
+        // TODO: not tested
+        public bool HasStates => States != null && States.Count > 0;
     }
 }

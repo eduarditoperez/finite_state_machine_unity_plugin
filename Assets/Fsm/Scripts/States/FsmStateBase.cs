@@ -9,6 +9,8 @@ namespace Fsm.State
     {
         public string StateName;
         public List<FsmTransition> Transitions;
+        public string Guid;
+        public Vector2 Position;
 
         public void Init(string stateName)
         {

@@ -7,37 +7,37 @@ using System;
 
 public class FsmTest
 {
-    public class ConstructorTests
+    public class InitTests
     {
         [Test]
-        public void Constructor_Creates_Empty_States()
+        public void Init_Creates_Empty_States()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
-
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
             Assert.IsEmpty(fsm.States);
         }
 
         [Test]
-        public void Constructor_Doesnt_Have_An_ActiveState()
+        public void Init_Doesnt_Have_An_ActiveState()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
 
             Assert.IsNull(fsm.ActiveState);
         }
 
         [Test]
-        public void Constructor_Doesnt_Have_An_InitialState()
+        public void Init_Doesnt_Have_An_InitialState()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
 
             Assert.IsNull(fsm.InitialState);
         }
 
         [Test]
-        public void Constructor_With_Initial_State_Set_InitialState()
+        public void Init_With_Initial_State_Set_InitialState()
         {
             FsmStateBase initialState = GivenANoopInitializedState("initialState");
-            FiniteStateMachine fsm = new FiniteStateMachine(initialState);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
 
             Assert.IsEmpty(fsm.States);
             Assert.IsNotNull(fsm.InitialState);
@@ -50,7 +50,8 @@ public class FsmTest
         [Test]
         public void AddState_Adds_The_State()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
 
@@ -62,7 +63,8 @@ public class FsmTest
         [Test]
         public void AddState_Doesnt_Add_The_State_Twice()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
 
@@ -75,7 +77,8 @@ public class FsmTest
         [Test]
         public void AddState_Doesnt_Adds_Different_States()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
 
             FsmStateBase stateA = GivenANoopInitializedState("StateA");
             FsmStateBase stateB = GivenANoopInitializedState("StateB");
@@ -92,7 +95,8 @@ public class FsmTest
         [Test]
         public void RemoveState_Does_Nothign_If_The_State_Is_Not_Defined()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
 
@@ -104,7 +108,8 @@ public class FsmTest
         [Test]
         public void RemoveState_Removes_The_State()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
             fsm.AddState(state);
@@ -116,7 +121,8 @@ public class FsmTest
         [Test]
         public void RemoveState_Leaves_The_State_Machine_With_Exactly_One_State_Less()
         {
-            FiniteStateMachine fsm = new FiniteStateMachine();
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
 
             FsmStateBase stateA = GivenANoopInitializedState("StateA");
             FsmStateBase stateB = GivenANoopInitializedState("StateB");
@@ -150,7 +156,7 @@ public class FsmTest
             FsmStateBase stateA = GivenANoopInitializedState("StateA");
             FsmStateBase stateB = GivenANoopInitializedState("StateB");
 
-            FiniteStateMachine fsm = new FiniteStateMachine(stateA);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(stateA);
 
             fsm.Start();
 
@@ -176,13 +182,14 @@ public class FsmTest
             FsmStateBase stateA = GivenANoopInitializedState("StateA");
             FsmStateBase stateB = GivenANoopInitializedState("StateB");
 
-            FiniteStateMachine fsm = new FiniteStateMachine(stateA);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(stateA);
 
             fsm.Start();
             fsm.Stop();
 
             Assert.IsNull(fsm.ActiveState);
         }
+
     }
 
     public class UpdateTests
@@ -192,7 +199,7 @@ public class FsmTest
         {
             CounterFsmState counterState = GivenACounterState("CounterState");
 
-            FiniteStateMachine fsm = new FiniteStateMachine(counterState);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(counterState);
 
             fsm.Start();
             Assert.Throws<NullReferenceException>( () => fsm.Update());
@@ -204,7 +211,7 @@ public class FsmTest
         {
             CounterFsmState counterState = GivenACounterInitializedState("CounterState");
 
-            FiniteStateMachine fsm = new FiniteStateMachine(counterState);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(counterState);
 
             Assert.AreEqual(0, counterState.Counter);
 
@@ -219,7 +226,7 @@ public class FsmTest
         {
             CounterFsmState counterState = GivenACounterInitializedState("CounterState");
 
-            FiniteStateMachine fsm = new FiniteStateMachine(counterState);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(counterState);
 
             fsm.Update();
 
@@ -238,7 +245,7 @@ public class FsmTest
             FsmTransition targetToSelfTransition = GivenAnAlwaysValidTransition(targetState);
             targetState.AddTransition(targetToSelfTransition);
 
-            FiniteStateMachine fsm = new FiniteStateMachine(initialState);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
             fsm.AddState(targetState);
 
             fsm.Start();
@@ -260,7 +267,7 @@ public class FsmTest
             FsmTransition toStateBTransition = GivenAnAlwaysValidTransition(stateB);
             initialState.AddTransition(toStateBTransition);
 
-            FiniteStateMachine fsm = new FiniteStateMachine(initialState);
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
             fsm.AddState(stateA);
             fsm.AddState(stateB);
 
@@ -304,5 +311,17 @@ public class FsmTest
         AlwaysInvalidTransition transition = ScriptableObject.CreateInstance<AlwaysInvalidTransition>();
         transition.Init(state);
         return transition;
+    }
+
+    private static FiniteStateMachine GivenAnEmptyFiniteStateMachine()
+    {
+        return ScriptableObject.CreateInstance<FiniteStateMachine>();
+    }
+
+    private static FiniteStateMachine GivenAFiniteStateMachine(FsmStateBase initialState)
+    {
+        FiniteStateMachine fsm = ScriptableObject.CreateInstance<FiniteStateMachine>();
+        fsm.Init(initialState);
+        return fsm;
     }
 }
