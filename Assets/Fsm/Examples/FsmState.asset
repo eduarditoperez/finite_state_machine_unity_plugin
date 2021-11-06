@@ -10,5 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15cf6ee322d45a14489171a872bd5eed, type: 3}
-  m_Name: New Fsm State Base
+  m_Name: FsmState
   m_EditorClassIdentifier: 
+  StateName: 
+  Transitions:
+  - {fileID: 0}

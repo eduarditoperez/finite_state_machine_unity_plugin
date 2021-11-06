@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Fsm.State
 {
-    [CreateAssetMenu()]
+    [CreateAssetMenu(fileName = "FsmState", menuName = "Fsm/State", order = 20)]
     public class FsmStateBase : ScriptableObject
     {
         public string StateName;
@@ -56,7 +56,7 @@ namespace Fsm.State
             int transitionCount = Transitions.Count;
             for (int i = 0; i < transitionCount && transition == null; i++)
             {
-                if (Transitions[i].IsValid())
+                if (Transitions[i].IsValid)
                 {
                     transition = Transitions[i];
                 }

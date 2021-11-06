@@ -6,10 +6,21 @@ namespace Fsm.State.Transition
     /// This interface is used to determine if a transition
     /// can be done.
     /// </summary>
-    public abstract class FsmTransition : ScriptableObject
+    [CreateAssetMenu(fileName = "Transition", menuName = "Fsm/State Transition", order = 30)]
+    public class FsmTransition : ScriptableObject
     {
-        public abstract bool IsValid();
-        public abstract string TransitionName { get; }
-        public abstract FsmStateBase NextState { get; } 
+        [TextArea]
+        public string description;
+
+        public string TransitionName;
+        public FsmStateBase NextState;
+        public bool IsValid;
+
+        public FsmTransition(string transitionName, FsmStateBase nextState, bool isValid)
+        {
+            TransitionName = transitionName;
+            NextState = nextState;
+            IsValid = isValid;
+        }
     }
 }

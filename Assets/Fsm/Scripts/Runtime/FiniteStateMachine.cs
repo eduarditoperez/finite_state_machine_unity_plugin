@@ -18,7 +18,7 @@ namespace Fsm.Core
     ///         - Call activeState.Enter()
     ///     - If a valid transition is not found, then call _activeState.Update()
     /// </summary>
-    [CreateAssetMenu()]
+    [CreateAssetMenu(fileName = "FiniteStateMachine", menuName = "Fsm/Finite State Machine", order = 10)]
     public class FiniteStateMachine : ScriptableObject
     {
         public List<FsmStateBase> States;
