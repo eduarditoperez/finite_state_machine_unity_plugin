@@ -9,11 +9,15 @@ public class FiniteStateMachineEditor : EditorWindow
     private FiniteStateMachineView _fsmView;
     private FiniteStateMachineInspectorView _inspectorView;
 
-    [MenuItem("Window/FiniteStateMachineEditor")]
+    [MenuItem("Fsm/Editor")]
     public static void OpenWindow()
     {
         FiniteStateMachineEditor wnd = GetWindow<FiniteStateMachineEditor>();
-        wnd.titleContent = new GUIContent("FiniteStateMachineEditor");
+        if (wnd != null)
+        {
+            wnd.titleContent = new GUIContent("FiniteStateMachineEditor");
+            wnd.minSize = new Vector2(800, 600);
+        }
     }
 
     public void CreateGUI()
@@ -34,7 +38,7 @@ public class FiniteStateMachineEditor : EditorWindow
         _fsmView = root.Q<FiniteStateMachineView>();
         _inspectorView = root.Q<FiniteStateMachineInspectorView>();
 
-        //OnSelectionChange();
+        OnSelectionChange();
     }
 
     private void OnSelectionChange()

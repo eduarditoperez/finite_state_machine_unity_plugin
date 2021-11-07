@@ -28,17 +28,18 @@ public class FiniteStateMachineView : GraphView
     {
         _fsm = fsm;
 
-        //graphViewChanged -= OnGraphViewChange;
+        graphViewChanged -= OnGraphViewChange;
         DeleteElements(graphElements);
-        //graphViewChanged += OnGraphViewChange;
-        //if (_fsm.HasStates)
-        //{
-        //    _fsm.States.ForEach(state => CreateStateView(state));
-        //}
+        graphViewChanged += OnGraphViewChange;
+        if (_fsm.HasStates)
+        {
+            _fsm.States.ForEach(state => CreateStateView(state));
+        }
     }
 
     private GraphViewChange OnGraphViewChange(GraphViewChange graphViewChange)
     {
+        
         if (graphViewChange.elementsToRemove != null)
         {
             graphViewChange.elementsToRemove.ForEach(element =>
@@ -56,8 +57,10 @@ public class FiniteStateMachineView : GraphView
 
     private void CreateStateView(FsmStateBase fsmStateBase)
     {
+        
         StateView stateView = new StateView(fsmStateBase);
         AddElement(stateView);
+        
     }
 
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)

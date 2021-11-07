@@ -4,6 +4,7 @@
         <ui:VisualElement name="leftPanel">
             <FiniteStateMachineInspectorView />
             <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(40, 40, 40);" />
+            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(40, 40, 40);" />
         </ui:VisualElement>
         <ui:VisualElement name="rightPanel">
             <ui:Label text="Finite state machine view" display-tooltip-when-elided="true" style="background-color: rgb(40, 40, 40);" />
