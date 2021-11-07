@@ -95,10 +95,6 @@ namespace Fsm.Core
                 {
                     FsmStateBase stateToRemove = States[stateIndex];
                     States.RemoveAt(stateIndex);
-
-                    // TODO: add an interface to deal with this
-                    //AssetDatabase.RemoveObjectFromAsset(stateToRemove);
-                    //AssetDatabase.SaveAssets();
                     AssetRepository.RemoveObjectFromAsset(stateToRemove);
                 }
             }
@@ -132,9 +128,6 @@ namespace Fsm.Core
 
             if (TryAddState(state))
             {
-                // TODO: add an interface for this
-                //AssetDatabase.AddObjectToAsset(state, this);
-                //AssetDatabase.SaveAssets();
                 AssetRepository.AddObjectToAsset(state, this);
                 return true;
             }

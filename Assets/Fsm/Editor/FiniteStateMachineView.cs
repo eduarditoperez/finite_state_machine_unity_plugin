@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using Fsm.Core;
 using Fsm.State;
+using Fsm.Repository;
 
 // TODO: add namespace
 public class FiniteStateMachineView : GraphView
@@ -10,6 +11,7 @@ public class FiniteStateMachineView : GraphView
     public new class UxmlFactory : UxmlFactory<FiniteStateMachineView, GraphView.UxmlTraits> { }
 
     private FiniteStateMachine _fsm;
+    private IAssetRepository _assetRepository;
 
     public FiniteStateMachineView()
     {
@@ -22,11 +24,14 @@ public class FiniteStateMachineView : GraphView
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Fsm/Editor/FiniteStateMachineEditor.uss");
         styleSheets.Add(styleSheet);
+
+        _assetRepository = new UnityAssetRepository();
     }
 
     internal void PopulateView(FiniteStateMachine fsm)
     {
         _fsm = fsm;
+        _fsm.AssetRepository = _assetRepository;
 
         graphViewChanged -= OnGraphViewChange;
         DeleteElements(graphElements);
