@@ -4,6 +4,7 @@ using Fsm.State;
 using Fsm.State.Transition;
 using UnityEngine;
 using System;
+using Fsm.Repository;
 
 public class FsmTest
 {
@@ -129,9 +130,21 @@ public class FsmTest
         }
 
         [Test]
+        public void RemoveState_Throws_Exception_If_AssetRepository_Is_Null()
+        {
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
+
+            FsmStateBase state = GivenANoopInitializedState("SomeState");
+            fsm.TryAddState(state);
+            Assert.Throws<NullReferenceException>(() => fsm.RemoveState(state));
+        }
+
+        [Test]
         public void RemoveState_Removes_The_State()
         {
             FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.AssetRepository = new NoopAssetRepository();
             fsm.Init(null);
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
@@ -145,6 +158,7 @@ public class FsmTest
         public void RemoveState_Leaves_The_State_Machine_With_Exactly_One_State_Less()
         {
             FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.AssetRepository = new NoopAssetRepository();
             fsm.Init(null);
 
             FsmStateBase stateA = GivenANoopInitializedState("StateA");
@@ -338,7 +352,8 @@ public class FsmTest
 
     private static FiniteStateMachine GivenAnEmptyFiniteStateMachine()
     {
-        return ScriptableObject.CreateInstance<FiniteStateMachine>();
+        FiniteStateMachine fsm = ScriptableObject.CreateInstance<FiniteStateMachine>();
+        return fsm;
     }
 
     private static FiniteStateMachine GivenAFiniteStateMachine(FsmStateBase initialState)

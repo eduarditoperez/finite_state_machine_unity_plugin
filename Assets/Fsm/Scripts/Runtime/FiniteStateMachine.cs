@@ -1,4 +1,5 @@
 using Fsm.State;
+using Fsm.Repository;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -23,10 +24,12 @@ namespace Fsm.Core
     public class FiniteStateMachine : ScriptableObject
     {
         public List<FsmStateBase> States;
-
         public FsmStateBase ActiveState;
         public FsmStateBase InitialState;
 
+        public IAssetRepository AssetRepository { get; set; }
+
+        // TODO: deprecate this function
         public void Init(FsmStateBase initialState)
         {
             InitialState = initialState;
@@ -94,8 +97,9 @@ namespace Fsm.Core
                     States.RemoveAt(stateIndex);
 
                     // TODO: add an interface to deal with this
-                    AssetDatabase.RemoveObjectFromAsset(stateToRemove);
-                    AssetDatabase.SaveAssets();
+                    //AssetDatabase.RemoveObjectFromAsset(stateToRemove);
+                    //AssetDatabase.SaveAssets();
+                    AssetRepository.RemoveObjectFromAsset(stateToRemove);
                 }
             }
         }
@@ -129,8 +133,9 @@ namespace Fsm.Core
             if (TryAddState(state))
             {
                 // TODO: add an interface for this
-                AssetDatabase.AddObjectToAsset(state, this);
-                AssetDatabase.SaveAssets();
+                //AssetDatabase.AddObjectToAsset(state, this);
+                //AssetDatabase.SaveAssets();
+                AssetRepository.AddObjectToAsset(state, this);
                 return true;
             }
 
