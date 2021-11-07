@@ -55,7 +55,7 @@ public class FsmTest
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
 
-            fsm.AddState(state);
+            fsm.TryAddState(state);
 
             Assert.IsNotEmpty(fsm.States);
         }
@@ -68,14 +68,14 @@ public class FsmTest
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
 
-            fsm.AddState(state);
-            fsm.AddState(state);
+            fsm.TryAddState(state);
+            fsm.TryAddState(state);
 
             Assert.AreEqual(1, fsm.States.Count);
         }
 
         [Test]
-        public void AddState_Doesnt_Adds_Different_States()
+        public void AddState_Adds_Different_States()
         {
             FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
             fsm.Init(null);
@@ -83,10 +83,33 @@ public class FsmTest
             FsmStateBase stateA = GivenANoopInitializedState("StateA");
             FsmStateBase stateB = GivenANoopInitializedState("StateB");
 
-            fsm.AddState(stateA);
-            fsm.AddState(stateB);
+            fsm.TryAddState(stateA);
+            fsm.TryAddState(stateB);
 
             Assert.AreEqual(2, fsm.States.Count);
+        }
+
+        [Test]
+        public void AddState_Returns_True_After_Adding_The_State()
+        {
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
+
+            FsmStateBase state = GivenANoopInitializedState("SomeState");
+
+            Assert.True(fsm.TryAddState(state));
+        }
+
+        [Test]
+        public void AddState_Returns_False_When_We_Add_The_Same_State_Twice()
+        {
+            FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
+            fsm.Init(null);
+
+            FsmStateBase state = GivenANoopInitializedState("SomeState");
+
+            fsm.TryAddState(state);
+            Assert.False(fsm.TryAddState(state));
         }
     }
 
@@ -112,7 +135,7 @@ public class FsmTest
             fsm.Init(null);
 
             FsmStateBase state = GivenANoopInitializedState("SomeState");
-            fsm.AddState(state);
+            fsm.TryAddState(state);
             fsm.RemoveState(state);
 
             Assert.IsEmpty(fsm.States);
@@ -128,9 +151,9 @@ public class FsmTest
             FsmStateBase stateB = GivenANoopInitializedState("StateB");
             FsmStateBase stateC = GivenANoopInitializedState("StateC");
 
-            fsm.AddState(stateA);
-            fsm.AddState(stateB);
-            fsm.AddState(stateC);
+            fsm.TryAddState(stateA);
+            fsm.TryAddState(stateB);
+            fsm.TryAddState(stateC);
 
             fsm.RemoveState(stateB);
 
@@ -246,7 +269,7 @@ public class FsmTest
             targetState.AddTransition(targetToSelfTransition);
 
             FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
-            fsm.AddState(targetState);
+            fsm.TryAddState(targetState);
 
             fsm.Start();
             fsm.Update();
@@ -268,8 +291,8 @@ public class FsmTest
             initialState.AddTransition(toStateBTransition);
 
             FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
-            fsm.AddState(stateA);
-            fsm.AddState(stateB);
+            fsm.TryAddState(stateA);
+            fsm.TryAddState(stateB);
 
             fsm.Start();
             fsm.Update();

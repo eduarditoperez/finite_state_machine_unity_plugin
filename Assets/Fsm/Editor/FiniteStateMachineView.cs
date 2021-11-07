@@ -39,7 +39,6 @@ public class FiniteStateMachineView : GraphView
 
     private GraphViewChange OnGraphViewChange(GraphViewChange graphViewChange)
     {
-        
         if (graphViewChange.elementsToRemove != null)
         {
             graphViewChange.elementsToRemove.ForEach(element =>

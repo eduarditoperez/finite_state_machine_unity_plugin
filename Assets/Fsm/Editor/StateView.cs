@@ -12,16 +12,16 @@ public class StateView : UnityEditor.Experimental.GraphView.Node
     {
         this.State = state;
         this.title = state.name;
-        //this.viewDataKey = state.Guid;
+        this.viewDataKey = state.Guid;
 
-        //style.left = state.Position.x;
-        //style.top = state.Position.y;
+        style.left = state.Position.x;
+        style.top = state.Position.y;
     }
 
     public override void SetPosition(Rect newPos)
     {
         base.SetPosition(newPos);
-        //State.Position.x = newPos.xMin;
-        //State.Position.y = newPos.yMin;
+        State.Position.x = newPos.xMin;
+        State.Position.y = newPos.yMin;
     }
 }

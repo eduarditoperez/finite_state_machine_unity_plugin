@@ -34,13 +34,14 @@ namespace Fsm.Core
         }
 
         // TODO: replace for TryAdd
-        public void AddState(FsmStateBase state)
+        public bool TryAddState(FsmStateBase state)
         {
             if (HasState(state))
             {
-                return;
+                return false;
             }
             States.Add(state);
+            return true;
         }
 
         private bool HasState(FsmStateBase state)
@@ -109,7 +110,7 @@ namespace Fsm.Core
             state.name = stateType.Name;
             state.Guid = GUID.Generate().ToString();
 
-            AddState(state);
+            TryAddState(state);
 
             // TODO: add an interface for this
             AssetDatabase.AddObjectToAsset(state, this);
