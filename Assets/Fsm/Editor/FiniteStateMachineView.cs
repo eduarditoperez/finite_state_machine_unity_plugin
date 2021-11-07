@@ -56,10 +56,8 @@ public class FiniteStateMachineView : GraphView
 
     private void CreateStateView(FsmStateBase fsmStateBase)
     {
-        
         StateView stateView = new StateView(fsmStateBase);
         AddElement(stateView);
-        
     }
 
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
@@ -77,7 +75,9 @@ public class FiniteStateMachineView : GraphView
 
     private void CreateState(System.Type stateType)
     {
-        FsmStateBase state = _fsm.CreateAndAddState(stateType);
-        CreateStateView(state);
+        if (_fsm.TryCreateState(stateType, out FsmStateBase state))
+        {
+            CreateStateView(state);
+        }
     }
 }

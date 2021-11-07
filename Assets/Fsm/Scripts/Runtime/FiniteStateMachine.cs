@@ -33,19 +33,34 @@ namespace Fsm.Core
             States = new List<FsmStateBase>();
         }
 
-        // TODO: replace for TryAdd
         public bool TryAddState(FsmStateBase state)
         {
             if (HasState(state))
             {
                 return false;
             }
+
+            if (States == null)
+            {
+                States = new List<FsmStateBase>();
+            }
+
             States.Add(state);
             return true;
         }
 
         private bool HasState(FsmStateBase state)
         {
+            if (States == null)
+            {
+                return false;
+            }
+
+            if (States.Count == 0)
+            {
+                return false;
+            }
+
             bool hasTheState = false;
             for (int i = 0; i < States.Count && !hasTheState; i++)
             {
@@ -104,19 +119,24 @@ namespace Fsm.Core
         }
 
         // TODO: not tested
-        public FsmStateBase CreateAndAddState(System.Type stateType)
+        public bool TryCreateState(System.Type stateType, out FsmStateBase state)
         {
-            FsmStateBase state = ScriptableObject.CreateInstance(stateType) as FsmStateBase;
+            state = ScriptableObject.CreateInstance(stateType) as FsmStateBase;
             state.name = stateType.Name;
             state.Guid = GUID.Generate().ToString();
+            state.StateName = stateType.ToString();
 
-            TryAddState(state);
+            if (TryAddState(state))
+            {
+                // TODO: add an interface for this
+                AssetDatabase.AddObjectToAsset(state, this);
+                AssetDatabase.SaveAssets();
+                return true;
+            }
 
-            // TODO: add an interface for this
-            AssetDatabase.AddObjectToAsset(state, this);
-            AssetDatabase.SaveAssets();
-
-            return state;
+            ScriptableObject.DestroyImmediate(state);
+            state = null;
+            return false;
         }
 
         // TODO: not tested
