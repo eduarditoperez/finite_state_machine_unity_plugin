@@ -139,5 +139,27 @@ namespace Fsm.Core
 
         // TODO: not tested
         public bool HasStates => States != null && States.Count > 0;
+
+        // TODO: continuar con el tutorial y agregar una funcion
+        // que nos permita crear transiciones entre estados
+        public bool TryAddTransition(FsmStateBase fromState, FsmStateBase toState)
+        {
+            // This function should try to add a transition 
+            // between states if the transition doesn´t exists
+            return false;
+        }
+
+        public bool TryRemoveTransition(FsmStateBase fromState, FsmStateBase toState)
+        {
+            // Same as add but for removal
+            return false;
+        }
+
+        public List<FsmStateBase> StatesToTransitionTo(FsmStateBase fromState)
+        {
+            // This function will give me the states we can transition to
+            // from the fromState
+            return null;
+        }
     }
 }

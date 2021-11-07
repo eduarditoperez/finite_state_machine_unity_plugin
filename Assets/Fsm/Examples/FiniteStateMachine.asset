@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4319541777112718749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e2cb5db8a111274fb3153e05391569b, type: 3}
+  m_Name: CounterFsmState
+  m_EditorClassIdentifier: 
+  StateName: Fsm.State.CounterFsmState
+  Transitions: []
+  Guid: dbe0a394456fcf941a213b11f64136fc
+  Position: {x: 88.640015, y: 74.576}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f680710aa82b4642a20e48322918087, type: 3}
+  m_Name: FiniteStateMachine
+  m_EditorClassIdentifier: 
+  States:
+  - {fileID: -4319541777112718749}
+  - {fileID: 2850214269036897195}
+  ActiveState: {fileID: 0}
+  InitialState: {fileID: 0}
+--- !u!114 &2850214269036897195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713cedf72813d4140a7c6b4a9fe19454, type: 3}
+  m_Name: NoopFsmState
+  m_EditorClassIdentifier: 
+  StateName: Fsm.State.NoopFsmState
+  Transitions: []
+  Guid: b30dc0b186dfd6e4f9d1c793364380e5
+  Position: {x: 0, y: 0}

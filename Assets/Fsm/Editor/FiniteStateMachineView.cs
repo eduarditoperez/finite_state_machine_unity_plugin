@@ -4,6 +4,8 @@ using UnityEditor.Experimental.GraphView;
 using Fsm.Core;
 using Fsm.State;
 using Fsm.Repository;
+using System.Collections.Generic;
+using System.Linq;
 
 // TODO: add namespace
 public class FiniteStateMachineView : GraphView
@@ -84,5 +86,13 @@ public class FiniteStateMachineView : GraphView
         {
             CreateStateView(state);
         }
+    }
+
+    public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+    {
+        return ports.ToList().Where(endPort 
+            => endPort.direction != startPort.direction &&
+            endPort.node != startPort.node).ToList();
+        
     }
 }
