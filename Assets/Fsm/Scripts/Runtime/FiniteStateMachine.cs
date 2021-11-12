@@ -167,9 +167,10 @@ namespace Fsm.Core
                 return false;
             }
 
-            FsmTransition transition = CreateTransition(fromState, toState);
-
+            FsmTransition transition = CreateTransition(typeof(FsmTransition), fromState, toState);
             fromState.AddTransition(transition);
+
+            AssetRepository.AddObjectToAsset(transition, this);
 
             return true;
         }
@@ -179,29 +180,35 @@ namespace Fsm.Core
             bool transitionExists = false;
             if (HasState(fromState) && HasState(toState))
             {
-                foreach (var transition in fromState.Transitions)
+                if (fromState.HasTransitions())
                 {
-                    if (transition.NextState.Equals(toState))
+                    foreach (var transition in fromState.Transitions)
                     {
-                        transitionExists = true;
+                        if (transition.NextState.Equals(toState))
+                        {
+                            transitionExists = true;
+                        }
                     }
                 }
             }
             return transitionExists;
         }
 
-        private FsmTransition CreateTransition(FsmStateBase fromState, FsmStateBase toState)
+        private FsmTransition CreateTransition(System.Type transitionType, FsmStateBase fromState, FsmStateBase toState)
         {
             string transitionName = $"{nameof(fromState)}_{nameof(toState)}";
-            FsmTransition transition = ScriptableObject.CreateInstance<FsmTransition>();
+            FsmTransition transition = ScriptableObject.CreateInstance(transitionType) as FsmTransition;
             transition.name = transitionName;
             transition.NextState = toState;
             transition.TransitionName = transitionName;
+            transition.Guid = GUID.Generate().ToString();
+
             return transition;
         }
 
         public bool TryRemoveTransition(FsmStateBase fromState, FsmStateBase toState)
         {
+            Debug.Log($"TryRemoveTransition {fromState.StateName} to {toState.StateName}");
             if (IsEmpty)
             {
                 return false;
@@ -221,6 +228,9 @@ namespace Fsm.Core
             {
                 FsmTransition transition = fromState.GetTransitionToState(toState);
                 fromState.RemoveTransition(transition);
+
+                AssetRepository.RemoveObjectFromAsset(transition);
+
                 return true;
             }
 

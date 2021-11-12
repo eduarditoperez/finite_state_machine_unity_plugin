@@ -15,6 +15,7 @@ namespace Fsm.State.Transition
         public string TransitionName;
         public FsmStateBase NextState;
         public bool IsValid;
+        public string Guid;
 
         public virtual void Init(string transitionName, FsmStateBase nextState, bool isValid)
         {

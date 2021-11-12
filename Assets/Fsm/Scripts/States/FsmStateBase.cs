@@ -13,6 +13,7 @@ namespace Fsm.State
         public string Guid;
         public Vector2 Position;
 
+        // TODO: eliminar esto porque no lo usamos
         public void Init(string stateName)
         {
             StateName = stateName;
@@ -21,6 +22,11 @@ namespace Fsm.State
 
         public void AddTransition(FsmTransition transition)
         {
+            if (Transitions == null)
+            {
+                Transitions = new List<FsmTransition>();
+            }
+
             if (HasTransition(transition))
             {
                 return;
@@ -32,6 +38,12 @@ namespace Fsm.State
         private bool HasTransition(FsmTransition transition)
         {
             bool hasTransition = false;
+
+            if (Transitions == null)
+            {
+                return hasTransition;
+            }
+
             int transitionCount = Transitions.Count;
 
             for (int i = 0; i < transitionCount && !hasTransition; i++)
@@ -43,8 +55,8 @@ namespace Fsm.State
             return hasTransition;
         }
 
-        public virtual void Enter() {}
-        public virtual void Exit() {}
+        public virtual void Enter() { }
+        public virtual void Exit() { }
 
         public virtual FsmStateBase Update()
         {
@@ -101,6 +113,12 @@ namespace Fsm.State
                 return;
             }
             Transitions.Remove(transition);
+        }
+
+        // TODO: not tested
+        public bool HasTransitions()
+        {
+            return Transitions != null && Transitions.Count > 0;
         }
     }
 }

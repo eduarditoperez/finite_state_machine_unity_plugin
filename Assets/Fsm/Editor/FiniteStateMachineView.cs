@@ -45,7 +45,8 @@ public class FiniteStateMachineView : GraphView
     }
 
     private GraphViewChange OnGraphViewChange(GraphViewChange graphViewChange)
-    {
+    { 
+        // Here we remove all elements in the view
         if (graphViewChange.elementsToRemove != null)
         {
             graphViewChange.elementsToRemove.ForEach(element =>
@@ -55,6 +56,24 @@ public class FiniteStateMachineView : GraphView
                 {
                     _fsm.RemoveState(stateView.State);
                 }
+
+                Edge edge = element as Edge;
+                if (edge != null)
+                {
+                    StateView outputStateView = edge.output.node as StateView;
+                    StateView inputStateView = edge.input.node as StateView;
+                    _fsm.TryRemoveTransition(outputStateView.State, inputStateView.State);
+                }
+            });
+        }
+
+        if (graphViewChange.edgesToCreate != null)
+        {
+            graphViewChange.edgesToCreate.ForEach(edge =>
+            {
+                StateView outputStateView = edge.output.node as StateView;
+                StateView inputStateView = edge.input.node as StateView;
+                _fsm.TryAddTransition(outputStateView.State, inputStateView.State);
             });
         }
 
