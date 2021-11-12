@@ -3,6 +3,7 @@ using Fsm.Repository;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Fsm.State.Transition;
 
 namespace Fsm.Core
 {
@@ -52,6 +53,7 @@ namespace Fsm.Core
             return true;
         }
 
+        // TODO: not tested
         private bool HasState(FsmStateBase state)
         {
             if (States == null)
@@ -138,15 +140,47 @@ namespace Fsm.Core
         }
 
         // TODO: not tested
-        public bool HasStates => States != null && States.Count > 0;
+        public bool IsEmpty => !IsNotEmpty;
+        // TODO: not tested
+        public bool IsNotEmpty => States != null && States.Count > 0;
 
-        // TODO: continuar con el tutorial y agregar una funcion
-        // que nos permita crear transiciones entre estados
         public bool TryAddTransition(FsmStateBase fromState, FsmStateBase toState)
         {
-            // This function should try to add a transition 
-            // between states if the transition doesn´t exists
-            return false;
+            if (IsEmpty)
+            {
+                return false;
+            }
+
+            if (!HasState(fromState))
+            {
+                return false;
+            }
+
+            if (!HasState(toState))
+            {
+                return false;
+            }
+
+            if (HasTransition(fromState, toState))
+            {
+                return false;
+            }
+
+            FsmTransition transition = CreateTransition(fromState, toState);
+
+            fromState.AddTransition(transition);
+
+            return true;
+        }
+
+        private FsmTransition CreateTransition(FsmStateBase fromState, FsmStateBase toState)
+        {
+            string transitionName = $"{nameof(fromState)}_{nameof(toState)}";
+            FsmTransition transition = ScriptableObject.CreateInstance<FsmTransition>();
+            transition.name = transitionName;
+            transition.NextState = toState;
+            transition.TransitionName = transitionName;
+            return transition;
         }
 
         public bool TryRemoveTransition(FsmStateBase fromState, FsmStateBase toState)
@@ -160,6 +194,22 @@ namespace Fsm.Core
             // This function will give me the states we can transition to
             // from the fromState
             return null;
+        }
+
+        public bool HasTransition(FsmStateBase fromState, FsmStateBase toState)
+        {
+            bool transitionExists = false;
+            if (HasState(fromState) && HasState(toState))
+            {
+                foreach (var transition in fromState.Transitions)
+                {
+                    if (transition.NextState.Equals(toState))
+                    {
+                        transitionExists = true;
+                    }
+                }
+            }
+            return transitionExists;
         }
     }
 }

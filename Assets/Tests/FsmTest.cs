@@ -315,6 +315,87 @@ public class FsmTest
         }
     }
 
+    public class TryAddTransitionTests
+    {
+        [Test]
+        public void TryAddTransition_Adds_The_Transition()
+        {
+            FiniteStateMachine fsm = new FiniteStateMachine();
+
+            FsmStateBase fromState = GivenAStateBase("FromState");
+            FsmStateBase toState = GivenAStateBase("ToState");
+
+            fsm.TryAddState(fromState);
+            fsm.TryAddState(toState);
+
+            fsm.TryAddTransition(fromState, toState);
+
+            Assert.True(fsm.HasTransition(fromState, toState));
+
+            ScriptableObject.DestroyImmediate(fromState);
+            ScriptableObject.DestroyImmediate(toState);
+        }
+
+        [Test]
+        public void TryAddTransition_For_Non_Existing_States_Does_Not_Create_The_Transition()
+        {
+            FiniteStateMachine fsm = new FiniteStateMachine();
+
+            FsmStateBase fromState = GivenAStateBase("FromState");
+            FsmStateBase toState = GivenAStateBase("ToState");
+
+            fsm.TryAddTransition(fromState, toState);
+
+            Assert.False(fsm.HasTransition(fromState, toState));
+
+            ScriptableObject.DestroyImmediate(fromState);
+            ScriptableObject.DestroyImmediate(toState);
+        }
+
+        [Test]
+        public void TryAddTransition_And_From_State_Does_Not_Exists_Does_Not_Create_The_Transition()
+        {
+            FiniteStateMachine fsm = new FiniteStateMachine();
+
+            FsmStateBase fromState = GivenAStateBase("FromState");
+            FsmStateBase toState = GivenAStateBase("ToState");
+
+            fsm.TryAddState(fromState);
+
+            fsm.TryAddTransition(fromState, toState);
+
+            Assert.False(fsm.HasTransition(fromState, toState));
+
+            ScriptableObject.DestroyImmediate(fromState);
+            ScriptableObject.DestroyImmediate(toState);
+        }
+
+        [Test]
+        public void TryAddTransition_And_To_State_Does_Not_Exists_Does_Not_Create_The_Transition()
+        {
+            FiniteStateMachine fsm = new FiniteStateMachine();
+
+            FsmStateBase fromState = GivenAStateBase("FromState");
+            FsmStateBase toState = GivenAStateBase("ToState");
+
+            fsm.TryAddState(toState);
+
+            fsm.TryAddTransition(fromState, toState);
+
+            Assert.False(fsm.HasTransition(fromState, toState));
+
+            ScriptableObject.DestroyImmediate(fromState);
+            ScriptableObject.DestroyImmediate(toState);
+        }
+
+        private FsmStateBase GivenAStateBase(string stateName)
+        {
+            FsmStateBase stateBase = ScriptableObject.CreateInstance<FsmStateBase>();
+            stateBase.Init(stateName);
+            return stateBase;
+        }
+    }
+
     private static NoopFsmState GivenANoopInitializedState(string stateName)
     {
         NoopFsmState state = ScriptableObject.CreateInstance<NoopFsmState>();

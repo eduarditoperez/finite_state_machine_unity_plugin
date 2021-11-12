@@ -38,7 +38,7 @@ public class FiniteStateMachineView : GraphView
         graphViewChanged -= OnGraphViewChange;
         DeleteElements(graphElements);
         graphViewChanged += OnGraphViewChange;
-        if (_fsm.HasStates)
+        if (_fsm.IsNotEmpty)
         {
             _fsm.States.ForEach(state => CreateStateView(state));
         }
@@ -69,7 +69,6 @@ public class FiniteStateMachineView : GraphView
 
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
-        //base.BuildContextualMenu(evt);
         {
             var types = TypeCache.GetTypesDerivedFrom<FsmStateBase>();
             foreach (var type in types)
@@ -93,6 +92,7 @@ public class FiniteStateMachineView : GraphView
         return ports.ToList().Where(endPort 
             => endPort.direction != startPort.direction &&
             endPort.node != startPort.node).ToList();
-        
     }
+
+
 }

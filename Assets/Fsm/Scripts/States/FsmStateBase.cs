@@ -21,7 +21,9 @@ namespace Fsm.State
         public virtual void AddTransition(FsmTransition transition)
         {
             if (HasTransition(transition))
+            {
                 return;
+            }
 
             Transitions.Add(transition);
         }
