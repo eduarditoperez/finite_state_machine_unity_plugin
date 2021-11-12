@@ -208,7 +208,6 @@ namespace Fsm.Core
 
         public bool TryRemoveTransition(FsmStateBase fromState, FsmStateBase toState)
         {
-            Debug.Log($"TryRemoveTransition {fromState.StateName} to {toState.StateName}");
             if (IsEmpty)
             {
                 return false;

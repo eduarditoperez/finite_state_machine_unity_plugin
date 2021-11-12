@@ -38,10 +38,33 @@ public class FiniteStateMachineView : GraphView
         graphViewChanged -= OnGraphViewChange;
         DeleteElements(graphElements);
         graphViewChanged += OnGraphViewChange;
+
+        // Create states
         if (_fsm.IsNotEmpty)
         {
             _fsm.States.ForEach(state => CreateStateView(state));
+
+            // Create visual connection bases on the states transitions
+            _fsm.States.ForEach(state =>
+            {
+                if (state.HasTransitions())
+                {
+                    state.Transitions.ForEach(transition =>
+                    {
+                        StateView fromView = FindStateView(state);
+                        StateView toView = FindStateView(transition.NextState);
+
+                        Edge edge = fromView.OutputPort.ConnectTo(toView.InputPort);
+                        AddElement(edge);
+                    });
+                }
+            });
         }
+    }
+
+    private StateView FindStateView(FsmStateBase state)
+    {
+        return GetNodeByGuid(state.Guid) as StateView;
     }
 
     private GraphViewChange OnGraphViewChange(GraphViewChange graphViewChange)
