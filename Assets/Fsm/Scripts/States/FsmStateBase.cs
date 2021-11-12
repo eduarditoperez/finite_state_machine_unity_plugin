@@ -1,4 +1,5 @@
 ﻿using Fsm.State.Transition;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace Fsm.State
             Transitions = new List<FsmTransition>();
         }
 
-        public virtual void AddTransition(FsmTransition transition)
+        public void AddTransition(FsmTransition transition)
         {
             if (HasTransition(transition))
             {
@@ -78,5 +79,28 @@ namespace Fsm.State
             return state.StateName == StateName;
         }
 
+        // TODO: not tested
+        public FsmTransition GetTransitionToState(FsmStateBase state)
+        {
+            FsmTransition fsmTransition = null;
+            foreach (var transition in Transitions)
+            {
+                if (fsmTransition == null && transition.NextState.Equals(state))
+                {
+                    fsmTransition = transition;
+                }
+            }
+            return fsmTransition;
+        }
+
+        // TODO: not tested
+        public void RemoveTransition(FsmTransition transition)
+        {
+            if (transition == null)
+            {
+                return;
+            }
+            Transitions.Remove(transition);
+        }
     }
 }

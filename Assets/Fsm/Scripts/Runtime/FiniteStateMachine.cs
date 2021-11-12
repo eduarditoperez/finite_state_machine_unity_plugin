@@ -173,29 +173,6 @@ namespace Fsm.Core
             return true;
         }
 
-        private FsmTransition CreateTransition(FsmStateBase fromState, FsmStateBase toState)
-        {
-            string transitionName = $"{nameof(fromState)}_{nameof(toState)}";
-            FsmTransition transition = ScriptableObject.CreateInstance<FsmTransition>();
-            transition.name = transitionName;
-            transition.NextState = toState;
-            transition.TransitionName = transitionName;
-            return transition;
-        }
-
-        public bool TryRemoveTransition(FsmStateBase fromState, FsmStateBase toState)
-        {
-            // Same as add but for removal
-            return false;
-        }
-
-        public List<FsmStateBase> StatesToTransitionTo(FsmStateBase fromState)
-        {
-            // This function will give me the states we can transition to
-            // from the fromState
-            return null;
-        }
-
         public bool HasTransition(FsmStateBase fromState, FsmStateBase toState)
         {
             bool transitionExists = false;
@@ -210,6 +187,50 @@ namespace Fsm.Core
                 }
             }
             return transitionExists;
+        }
+
+        private FsmTransition CreateTransition(FsmStateBase fromState, FsmStateBase toState)
+        {
+            string transitionName = $"{nameof(fromState)}_{nameof(toState)}";
+            FsmTransition transition = ScriptableObject.CreateInstance<FsmTransition>();
+            transition.name = transitionName;
+            transition.NextState = toState;
+            transition.TransitionName = transitionName;
+            return transition;
+        }
+
+        public bool TryRemoveTransition(FsmStateBase fromState, FsmStateBase toState)
+        {
+            if (IsEmpty)
+            {
+                return false;
+            }
+
+            if (!HasState(fromState))
+            {
+                return false;
+            }
+
+            if (!HasState(toState))
+            {
+                return false;
+            }
+
+            if (HasTransition(fromState, toState))
+            {
+                FsmTransition transition = fromState.GetTransitionToState(toState);
+                fromState.RemoveTransition(transition);
+                return true;
+            }
+
+            return false;
+        }
+
+        public List<FsmStateBase> StatesToTransitionTo(FsmStateBase fromState)
+        {
+            // This function will give me the states we can transition to
+            // from the fromState
+            return null;
         }
     }
 }
