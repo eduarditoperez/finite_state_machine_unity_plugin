@@ -5,6 +5,7 @@ using Fsm.State.Transition;
 using UnityEngine;
 using System;
 using Fsm.Repository;
+using System.Collections.Generic;
 
 public class FsmTest
 {
@@ -462,6 +463,28 @@ public class FsmTest
             fsm.TryAddTransition(fromState, toState);
 
             Assert.False(fsm.TryRemoveTransition(fromState, toState));
+
+            ScriptableObject.DestroyImmediate(fromState);
+            ScriptableObject.DestroyImmediate(toState);
+        }
+    }
+
+    public class GetReachableStatesTests
+    {
+        [Test]
+        public void GetReachableStates_Returns_The_All_The_States_We_Can_Transition_To_For_A_Given_State()
+        {
+            FiniteStateMachine fsm = new FiniteStateMachine();
+            FsmStateBase fromState = GivenAStateBase("FromState");
+            FsmStateBase toState = GivenAStateBase("toState");
+
+            fsm.TryAddState(fromState);
+            fsm.TryAddState(toState);
+
+            fsm.TryAddTransition(fromState, toState);
+
+            List<FsmStateBase> states = fsm.GetReachableStates(fromState);
+            Assert.IsNotEmpty(states);
 
             ScriptableObject.DestroyImmediate(fromState);
             ScriptableObject.DestroyImmediate(toState);

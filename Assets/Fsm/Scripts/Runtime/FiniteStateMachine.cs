@@ -1,6 +1,7 @@
 using Fsm.State;
 using Fsm.Repository;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using Fsm.State.Transition;
@@ -226,11 +227,9 @@ namespace Fsm.Core
             return false;
         }
 
-        public List<FsmStateBase> StatesToTransitionTo(FsmStateBase fromState)
+        public List<FsmStateBase> GetReachableStates(FsmStateBase state)
         {
-            // This function will give me the states we can transition to
-            // from the fromState
-            return null;
+            return state.Transitions.Select(transition => transition.NextState).ToList();
         }
     }
 }
