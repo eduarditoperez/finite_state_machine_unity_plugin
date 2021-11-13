@@ -1,12 +1,10 @@
 using Fsm.Core;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fsm.RunTime
 {
-    public class FsmRunner : MonoBehaviour
+    public class FiniteStateMachineRunner : MonoBehaviour
     {
         [SerializeField]
         private FiniteStateMachine _finiteStateMachine;
