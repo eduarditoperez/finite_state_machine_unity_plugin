@@ -322,6 +322,7 @@ public class FsmTest
         public void TryAddTransition_Adds_The_Transition()
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
+            fsm.AssetRepository = GivenAnAssetRepository();
 
             FsmStateBase fromState = GivenAStateBase("FromState");
             FsmStateBase toState = GivenAStateBase("ToState");
@@ -406,6 +407,8 @@ public class FsmTest
         public void TryRemoveTransition_Removes_The_Transition()
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
+            fsm.AssetRepository = GivenAnAssetRepository();
+
             FsmStateBase fromState = GivenAStateBase("FromState");
             FsmStateBase toState = GivenAStateBase("toState");
 
@@ -475,6 +478,8 @@ public class FsmTest
         public void GetReachableStates_Returns_The_All_The_States_We_Can_Transition_To_For_A_Given_State()
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
+            fsm.AssetRepository = GivenAnAssetRepository();
+
             FsmStateBase fromState = GivenAStateBase("FromState");
             FsmStateBase toState = GivenAStateBase("toState");
 
@@ -489,6 +494,11 @@ public class FsmTest
             ScriptableObject.DestroyImmediate(fromState);
             ScriptableObject.DestroyImmediate(toState);
         }
+    }
+
+    private static IAssetRepository GivenAnAssetRepository()
+    {
+        return new NoopAssetRepository();
     }
 
     private static FsmStateBase GivenAStateBase(string stateName)
