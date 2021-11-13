@@ -28,7 +28,7 @@ public class FiniteStateMachineEditor : EditorWindow
         // Import UXML
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Fsm/Editor/FiniteStateMachineEditor.uxml");
         visualTree.CloneTree(root);
-        
+
         // A stylesheet can be added to a VisualElement.
         // The style will be applied to the VisualElement and all of its children.
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Fsm/Editor/FiniteStateMachineEditor.uss");
@@ -36,6 +36,7 @@ public class FiniteStateMachineEditor : EditorWindow
 
         // Populate
         _fsmView = root.Q<FiniteStateMachineView>();
+        _fsmView.OnStateSelected = OnStateSelectionChanged;
         _inspectorView = root.Q<FiniteStateMachineInspectorView>();
 
         OnSelectionChange();
@@ -48,5 +49,10 @@ public class FiniteStateMachineEditor : EditorWindow
         {
             _fsmView.PopulateView(fsm);
         }
+    }
+
+    private void OnStateSelectionChanged(StateView stateView)
+    {
+        _inspectorView.UpdateSelection(stateView);
     }
 }

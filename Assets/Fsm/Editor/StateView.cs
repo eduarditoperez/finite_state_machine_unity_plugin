@@ -1,13 +1,12 @@
 using Fsm.State;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 
 // TODO: add namespace
 public class StateView : UnityEditor.Experimental.GraphView.Node
 {
+    public Action<StateView> OnStateSelected;
     public FsmStateBase State;
     public Port InputPort;
     public Port OutputPort;
@@ -52,5 +51,11 @@ public class StateView : UnityEditor.Experimental.GraphView.Node
         base.SetPosition(newPos);
         State.Position.x = newPos.xMin;
         State.Position.y = newPos.yMin;
+    }
+
+    public override void OnSelected()
+    {
+        base.OnSelected();
+        OnStateSelected?.Invoke(this);
     }
 }

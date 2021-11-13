@@ -6,11 +6,13 @@ using Fsm.State;
 using Fsm.Repository;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 // TODO: add namespace
 public class FiniteStateMachineView : GraphView
 {
     public new class UxmlFactory : UxmlFactory<FiniteStateMachineView, GraphView.UxmlTraits> { }
+    public Action<StateView> OnStateSelected;
 
     private FiniteStateMachine _fsm;
     private IAssetRepository _assetRepository;
@@ -106,6 +108,7 @@ public class FiniteStateMachineView : GraphView
     private void CreateStateView(FsmStateBase fsmStateBase)
     {
         StateView stateView = new StateView(fsmStateBase);
+        stateView.OnStateSelected = OnStateSelected;
         AddElement(stateView);
     }
 
