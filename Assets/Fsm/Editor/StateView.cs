@@ -26,8 +26,12 @@ public class StateView : UnityEditor.Experimental.GraphView.Node
 
     private void CreateInputPorts()
     {
-        InputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Multi, null);
+        if (State is RootState)
+        {
+            return;
+        }
 
+        InputPort = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Multi, null);
         if (InputPort != null)
         {
             InputPort.name = "";
@@ -37,8 +41,12 @@ public class StateView : UnityEditor.Experimental.GraphView.Node
 
     private void CreateOutputPorts()
     {
-        OutputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Multi, null);
+        if (State is EndState)
+        {
+            return;
+        }
 
+        OutputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Multi, null);
         if (OutputPort != null)
         {
             OutputPort.name = "";

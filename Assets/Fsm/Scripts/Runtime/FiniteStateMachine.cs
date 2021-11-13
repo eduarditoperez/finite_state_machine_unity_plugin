@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using Fsm.State.Transition;
+using System;
 
 namespace Fsm.Core
 {
@@ -50,6 +51,10 @@ namespace Fsm.Core
                 States = new List<FsmStateBase>();
             }
 
+            if (state is RootState)
+            {
+                InitialState = state;
+            }
             States.Add(state);
             return true;
         }
@@ -196,7 +201,7 @@ namespace Fsm.Core
 
         private FsmTransition CreateTransition(System.Type transitionType, FsmStateBase fromState, FsmStateBase toState)
         {
-            string transitionName = $"{nameof(fromState)}_{nameof(toState)}";
+            string transitionName = $"{fromState.GetType().Name}_to_{toState.GetType().Name}";
             FsmTransition transition = ScriptableObject.CreateInstance(transitionType) as FsmTransition;
             transition.name = transitionName;
             transition.NextState = toState;

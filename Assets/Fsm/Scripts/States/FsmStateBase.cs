@@ -13,7 +13,7 @@ namespace Fsm.State
         public string Guid;
         public Vector2 Position;
 
-        // TODO: eliminar esto porque no lo usamos
+        // TODO: Esto lo estamos usando solo para los tests
         public void Init(string stateName)
         {
             StateName = stateName;
