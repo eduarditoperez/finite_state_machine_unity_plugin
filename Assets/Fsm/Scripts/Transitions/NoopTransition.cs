@@ -7,21 +7,11 @@ namespace Fsm.State
     /// </summary>
     public class NoopTransition : FsmTransition
     {
-        private string _transitionName;
-        private FsmState _nextState;
-
-        public string TransitionName => _transitionName;
-        public FsmState NextState => _nextState;
-
-        public NoopTransition(string transitionName, FsmState nextState)
+        public void Init(string transitionName, FsmState nextState)
         {
-            _transitionName = transitionName;
-            _nextState = nextState;
-        }
-
-        public bool IsValid()
-        {
-            return true;
+            TransitionName = transitionName;
+            NextState = nextState;
+            IsValid = false;
         }
     }
 }

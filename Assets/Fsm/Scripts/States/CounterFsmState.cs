@@ -3,25 +3,34 @@ using Fsm.State.Transition;
 
 namespace Fsm.State
 {
-    public class CounterFsmState : FsmStateBase
+    public class CounterFsmState : FsmState
     {
-        private int _counter;
+        public int Counter { get; private set; }
+        public int EnterCounter { get; private set; }
+        public int ExitCounter { get; private set; }
+
         private string _stateName;
         private List<FsmTransition> _transitions;
 
-        public int Counter => _counter;
+        public override void Enter()
+        {
+            EnterCounter++;
+        }
 
-        public CounterFsmState(string stateName) : base(stateName) {}
+        public override void Exit()
+        {
+            ExitCounter++;
+        }
 
         public override FsmState Update()
         {
             try
             {
-                _counter++;
+                Counter++;
             }
             catch (System.OverflowException)
             {
-                _counter = 0;
+                Counter = 0;
             }
             return base.Update();
         }

@@ -2,16 +2,11 @@
 {
     public class AlwaysInvalidTransition : FsmTransition
     {
-        public string TransitionName => typeof(AlwaysInvalidTransition).Name;
-        public FsmState NextState => _nextState;
-
-        private FsmState _nextState;
-
-        public AlwaysInvalidTransition(FsmState nextState)
+        public void Init(FsmState nextState)
         {
-            _nextState = nextState;
+            TransitionName = typeof(AlwaysInvalidTransition).Name;
+            NextState = nextState;
+            IsValid = false;
         }
-
-        public bool IsValid() => false;
     }
 }

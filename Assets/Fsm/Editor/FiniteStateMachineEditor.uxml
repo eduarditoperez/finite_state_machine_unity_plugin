@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="FiniteStateMachineEditor.uss" />
+    <FiniteStateMachineSplitView fixed-pane-initial-dimension="300">
+        <ui:VisualElement name="leftPanel">
+            <FiniteStateMachineInspectorView />
+            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(40, 40, 40);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="rightPanel">
+            <ui:Label text="Finite state machine view" display-tooltip-when-elided="true" style="background-color: rgb(40, 40, 40);" />
+            <FiniteStateMachineView focusable="true" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </FiniteStateMachineSplitView>
+</ui:UXML>
