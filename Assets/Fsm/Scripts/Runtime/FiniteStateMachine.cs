@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using Fsm.State.Transition;
-using System;
 
 namespace Fsm.Core
 {
@@ -26,20 +25,22 @@ namespace Fsm.Core
     [CreateAssetMenu(fileName = "FiniteStateMachine", menuName = "Fsm/Finite State Machine", order = 10)]
     public class FiniteStateMachine : ScriptableObject
     {
-        public List<State.State> States;
-        public State.State ActiveState;
-        public State.State InitialState;
+        public List<Fsm.State.State> States;
+        public Fsm.State.State ActiveState;
+        public Fsm.State.State InitialState;
+
+        private Fsm.State.State _currentActiveState;
 
         public IAssetRepository AssetRepository { get; set; }
 
         // TODO: deprecate this function
-        public void Init(State.State initialState)
+        public void Init(Fsm.State.State initialState)
         {
             InitialState = initialState;
-            States = new List<State.State>();
+            States = new List<Fsm.State.State>();
         }
 
-        public bool TryAddState(State.State state)
+        public bool TryAddState(Fsm.State.State state)
         {
             if (HasState(state))
             {
@@ -48,7 +49,7 @@ namespace Fsm.Core
 
             if (States == null)
             {
-                States = new List<State.State>();
+                States = new List<Fsm.State.State>();
             }
 
             // TODO: not tested
@@ -62,7 +63,7 @@ namespace Fsm.Core
         }
 
         // TODO: not tested
-        private bool HasState(State.State state)
+        private bool HasState(Fsm.State.State state)
         {
             if (States == null)
             {
@@ -86,7 +87,7 @@ namespace Fsm.Core
         }
 
         // TODO: replace for TryRemove
-        public void RemoveState(State.State state)
+        public void RemoveState(Fsm.State.State state)
         {
             if (HasState(state))
             {
@@ -103,7 +104,7 @@ namespace Fsm.Core
 
                 if (stateFound)
                 {
-                    State.State stateToRemove = States[stateIndex];
+                    Fsm.State.State stateToRemove = States[stateIndex];
                     States.RemoveAt(stateIndex);
                     AssetRepository.RemoveObjectFromAsset(stateToRemove);
                 }
@@ -124,7 +125,14 @@ namespace Fsm.Core
         {
             if (ActiveState != null)
             {
-                ActiveState = ActiveState.Update();
+                _currentActiveState = ActiveState.Update();
+                if (!_currentActiveState.Equals(ActiveState))
+                {
+                    ActiveState.Exit();
+                    _currentActiveState.Enter();
+                }
+
+                ActiveState = _currentActiveState;
             }
         }
 
