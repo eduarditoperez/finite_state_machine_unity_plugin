@@ -7,7 +7,7 @@ namespace Fsm.State
     /// </summary>
     public class NoopTransition : FsmTransition
     {
-        public void Init(string transitionName, State nextState)
+        public void Init(string transitionName, FsmState nextState)
         {
             TransitionName = transitionName;
             NextState = nextState;

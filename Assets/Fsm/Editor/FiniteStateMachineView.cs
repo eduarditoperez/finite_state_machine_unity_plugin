@@ -64,7 +64,7 @@ public class FiniteStateMachineView : GraphView
         }
     }
 
-    private StateView FindStateView(State state)
+    private StateView FindStateView(FsmState state)
     {
         return GetNodeByGuid(state.Guid) as StateView;
     }
@@ -105,7 +105,7 @@ public class FiniteStateMachineView : GraphView
         return graphViewChange;
     }
 
-    private void CreateStateView(State fsmStateBase)
+    private void CreateStateView(FsmState fsmStateBase)
     {
         StateView stateView = new StateView(fsmStateBase);
         stateView.OnStateSelected = OnStateSelected;
@@ -115,7 +115,7 @@ public class FiniteStateMachineView : GraphView
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
         {
-            var types = TypeCache.GetTypesDerivedFrom<State>();
+            var types = TypeCache.GetTypesDerivedFrom<FsmState>();
             foreach (var type in types)
             {
                 evt.menu.AppendAction($"[{type.BaseType.Name}] {type.Name}", 
@@ -126,7 +126,7 @@ public class FiniteStateMachineView : GraphView
 
     private void CreateState(System.Type stateType)
     {
-        if (_fsm.TryCreateState(stateType, out State state))
+        if (_fsm.TryCreateState(stateType, out FsmState state))
         {
             CreateStateView(state);
         }

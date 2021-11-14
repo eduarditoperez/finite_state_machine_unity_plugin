@@ -13,12 +13,12 @@ namespace Fsm.State.Transition
         public string description;
 
         public string TransitionName;
-        public State NextState;
+        public FsmState NextState;
         public bool IsValid;
         public string Guid;
 
         // TODO: deprecate this
-        public virtual void Init(string transitionName, State nextState, bool isValid)
+        public virtual void Init(string transitionName, FsmState nextState, bool isValid)
         {
             TransitionName = transitionName;
             NextState = nextState;

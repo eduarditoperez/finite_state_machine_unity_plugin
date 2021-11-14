@@ -8,9 +8,9 @@ namespace Fsm.State
     /// The is the first state any fsm should have and
     /// the fsm will start with this one first
     /// </summary>
-    public class RootState : State
+    public class RootState : FsmState
     {
-        public override State Update()
+        public override FsmState Update()
         {
             return base.Update();
         }

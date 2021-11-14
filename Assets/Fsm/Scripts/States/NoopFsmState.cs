@@ -3,7 +3,7 @@
     /// <summary>
     /// Placeholder state
     /// </summary>
-    public class NoopFsmState : State
+    public class NoopFsmState : FsmState
     {
         public int EnterCounter { get; private set; }
         public int ExitCounter { get; private set; }
@@ -18,7 +18,7 @@
             ExitCounter++;
         }
 
-        public override State Update()
+        public override FsmState Update()
         {
             return this;
         }

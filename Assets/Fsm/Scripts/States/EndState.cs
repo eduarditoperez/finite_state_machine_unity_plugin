@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Fsm.State
 {
-    public class EndState : State
+    public class EndState : FsmState
     {
-        public override State Update()
+        public override FsmState Update()
         {
             return this;
         }

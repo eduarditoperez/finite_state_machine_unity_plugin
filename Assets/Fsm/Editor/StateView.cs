@@ -7,11 +7,11 @@ using UnityEditor.Experimental.GraphView;
 public class StateView : UnityEditor.Experimental.GraphView.Node
 {
     public Action<StateView> OnStateSelected;
-    public State State;
+    public FsmState State;
     public Port InputPort;
     public Port OutputPort;
 
-    public StateView(State state)
+    public StateView(FsmState state)
     {
         this.State = state;
         this.title = state.name;

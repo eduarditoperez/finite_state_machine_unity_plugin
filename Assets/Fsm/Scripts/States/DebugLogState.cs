@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Fsm.State
 {
-    public class DebugLogState : State
+    public class DebugLogState : FsmState
     {
         public string Message;
 
-        public override State Update()
+        public override FsmState Update()
         {
             Debug.Log(Message);
             return base.Update();
