@@ -17,14 +17,6 @@ namespace Fsm.State.Transition
         public bool IsValid;
         public string Guid;
 
-        // TODO: deprecate this
-        public virtual void Init(string transitionName, FsmState nextState, bool isValid)
-        {
-            TransitionName = transitionName;
-            NextState = nextState;
-            IsValid = isValid;
-        }
-
         public virtual FsmTransition Clone()
         {
             return ScriptableObject.Instantiate(this);
