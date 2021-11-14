@@ -11,6 +11,7 @@ namespace Fsm.State.Transition
         [TextArea]
         public string description;
 
+        public FsmTransitionType TransitionType;
         public string TransitionName;
         public FsmState NextState;
         public bool IsValid;

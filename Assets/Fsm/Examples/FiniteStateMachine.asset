@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WaitState_to_DebugLogState
   m_EditorClassIdentifier: 
   description: 
+  TransitionType: 2
   TransitionName: WaitState_to_DebugLogState
   NextState: {fileID: 8254792492760122395}
   IsValid: 1
@@ -66,6 +67,7 @@ MonoBehaviour:
   m_Name: DebugLogState_to_WaitState
   m_EditorClassIdentifier: 
   description: 
+  TransitionType: 2
   TransitionName: DebugLogState_to_WaitState
   NextState: {fileID: -266994934541372913}
   IsValid: 1
@@ -83,6 +85,7 @@ MonoBehaviour:
   m_Name: RootState_to_DebugLogState
   m_EditorClassIdentifier: 
   description: 
+  TransitionType: 2
   TransitionName: RootState_to_DebugLogState
   NextState: {fileID: 8254792492760122395}
   IsValid: 1
