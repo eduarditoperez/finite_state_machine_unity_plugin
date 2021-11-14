@@ -3,22 +3,23 @@ using System.Collections.Generic;
 
 namespace Fsm.State.Transition
 {
-    public class ValidatorStrategyProvider
+    public static class ValidatorStrategyProvider
     {
-        private Dictionary<FsmTransitionType, ValidatorStrategy> _strategies;
+        private static Dictionary<FsmTransitionType, ValidatorStrategy> _strategies;
 
-        public ValidatorStrategyProvider()
+        public static void Init()
         {
-            UnityEngine.Debug.Log($"ValidatorStrategyProvider");
-            _strategies = new Dictionary<FsmTransitionType, ValidatorStrategy>();
-            foreach (FsmTransitionType transitionType in Enum.GetValues(typeof(FsmTransitionType)))
+            if (_strategies == null)
             {
-                UnityEngine.Debug.Log($"Adding transitionType {transitionType}");
-                _strategies.Add(transitionType, CreateValidatorStrategy(transitionType));
+                _strategies = new Dictionary<FsmTransitionType, ValidatorStrategy>();
+                foreach (FsmTransitionType transitionType in Enum.GetValues(typeof(FsmTransitionType)))
+                {
+                    _strategies.Add(transitionType, CreateValidatorStrategy(transitionType));
+                }
             }
         }
 
-        private ValidatorStrategy CreateValidatorStrategy(FsmTransitionType transitionType)
+        private static ValidatorStrategy CreateValidatorStrategy(FsmTransitionType transitionType)
         {
             // TODO: more complex validators will need a context
             // to know how to initialize them
@@ -33,17 +34,10 @@ namespace Fsm.State.Transition
             return new AlwaysTrueValidator();
         }
 
-        public ValidatorStrategy ProvideStrategy(FsmTransitionType fsmTransitionType)
+        public static ValidatorStrategy ProvideStrategy(FsmTransitionType fsmTransitionType)
         {
-            UnityEngine.Debug.Log($"ProvideStrategy for TransitionType {fsmTransitionType}");
-            if (_strategies
-                .TryGetValue(fsmTransitionType,
-                out ValidatorStrategy validatorStrategy))
-            {
-                UnityEngine.Debug.Log("ValidatorStrategy not found");
-                return validatorStrategy;
-            }
-            return null;
+            _strategies.TryGetValue(fsmTransitionType, out ValidatorStrategy validatorStrategy);
+            return validatorStrategy;
         }
     }
 }

@@ -211,7 +211,7 @@ namespace Fsm.Core
 
         private FsmTransition CreateTransition(System.Type transitionType, State.FsmState fromState, State.FsmState toState)
         {
-            string transitionName = $"{fromState.GetType().Name}_to_{toState.GetType().Name}";
+            string transitionName = $"Transition_From_{fromState.GetType().Name}_To_{toState.GetType().Name}";
             FsmTransition transition = ScriptableObject.CreateInstance(transitionType) as FsmTransition;
             transition.name = transitionName;
             transition.NextState = toState;

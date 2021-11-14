@@ -26,8 +26,8 @@ namespace Fsm.State.Transition
 
         private bool IsValidTransition()
         {
-            ValidatorStrategyProvider strategyProvider = new ValidatorStrategyProvider();
-            _validatorStrategy = strategyProvider.ProvideStrategy(TransitionType);
+            ValidatorStrategyProvider.Init();
+            _validatorStrategy = ValidatorStrategyProvider.ProvideStrategy(TransitionType);
             return _validatorStrategy.IsValid();
         }
     }
