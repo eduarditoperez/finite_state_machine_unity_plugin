@@ -14,12 +14,21 @@ namespace Fsm.State.Transition
         public FsmTransitionType TransitionType;
         public string TransitionName;
         public FsmState NextState;
-        public bool IsValid;
+        public bool IsValid => IsValidTransition();
         public string Guid;
+
+        private ValidatorStrategy _validatorStrategy;
 
         public virtual FsmTransition Clone()
         {
             return ScriptableObject.Instantiate(this);
+        }
+
+        private bool IsValidTransition()
+        {
+            ValidatorStrategyProvider strategyProvider = new ValidatorStrategyProvider();
+            _validatorStrategy = strategyProvider.ProvideStrategy(TransitionType);
+            return _validatorStrategy.IsValid();
         }
     }
 }

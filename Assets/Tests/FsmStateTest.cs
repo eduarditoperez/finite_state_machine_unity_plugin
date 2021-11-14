@@ -229,11 +229,8 @@ namespace Fsm.State.Test
         private static NoopTransition GivenANoopTransition(string transitionName, FsmState fsmState)
         {
             NoopTransition noopTransition = ScriptableObject.CreateInstance<NoopTransition>();
-
             noopTransition.TransitionName = transitionName;
             noopTransition.NextState = fsmState;
-            noopTransition.IsValid = false;
-
             return noopTransition;
         }
 
@@ -249,7 +246,7 @@ namespace Fsm.State.Test
             AlwaysValidTransition transition = ScriptableObject.CreateInstance<AlwaysValidTransition>();
             transition.TransitionName = typeof(AlwaysValidTransition).Name; ;
             transition.NextState = state;
-            transition.IsValid = true;
+            transition.TransitionType = FsmTransitionType.ValidTransition;
             return transition;
         }
 
@@ -258,7 +255,7 @@ namespace Fsm.State.Test
             AlwaysInvalidTransition transition = ScriptableObject.CreateInstance<AlwaysInvalidTransition>();
             transition.TransitionName = typeof(AlwaysInvalidTransition).Name;
             transition.NextState = state;
-            transition.IsValid = false;
+            transition.TransitionType = FsmTransitionType.InvalidTransition;
             return transition;
         }
     }
