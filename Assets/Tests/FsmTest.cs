@@ -572,14 +572,18 @@ public class FsmTest
     private static FsmTransition GivenAnAlwaysValidTransition(FsmState state)
     {
         AlwaysValidTransition transition = ScriptableObject.CreateInstance<AlwaysValidTransition>();
-        transition.Init(state);
+        transition.TransitionName = typeof(AlwaysValidTransition).Name; ;
+        transition.NextState = state;
+        transition.IsValid = true;
         return transition;
     }
 
     private static FsmTransition GivenAnAlwaysInvalidTransition(FsmState state)
     {
         AlwaysInvalidTransition transition = ScriptableObject.CreateInstance<AlwaysInvalidTransition>();
-        transition.Init(state);
+        transition.TransitionName = typeof(AlwaysInvalidTransition).Name;
+        transition.NextState = state;
+        transition.IsValid = false;
         return transition;
     }
 

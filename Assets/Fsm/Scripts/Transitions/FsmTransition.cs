@@ -3,8 +3,7 @@
 namespace Fsm.State.Transition
 {
     /// <summary>
-    /// This interface is used to determine if a transition
-    /// can be done.
+    /// This script represetns a transition between states inside a FSM.
     /// </summary>
     [CreateAssetMenu(fileName = "Transition", menuName = "Fsm/State Transition", order = 30)]
     public class FsmTransition : ScriptableObject
