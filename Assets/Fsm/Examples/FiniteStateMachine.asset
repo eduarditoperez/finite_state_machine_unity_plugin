@@ -15,7 +15,7 @@ MonoBehaviour:
   description: 
   TransitionName: WaitState_to_DebugLogState
   NextState: {fileID: 8254792492760122395}
-  IsValid: 0
+  IsValid: 1
   Guid: ccad3f6c52e01da4a80ae96a16d8f938
 --- !u!114 &-266994934541372913
 MonoBehaviour:
