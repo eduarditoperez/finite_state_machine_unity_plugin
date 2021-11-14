@@ -293,6 +293,46 @@ public class FsmTest
         }
 
         [Test]
+        public void Update_Calls_Enter_Function_Of_The_State_We_Transition_To()
+        {
+            CounterFsmState initialState = GivenACounterInitializedState("InitialState");
+            NoopFsmState targetState = GivenANoopInitializedState("TargetState");
+
+            FsmTransition initialToTargetTransition = GivenAnAlwaysValidTransition(targetState);
+            initialState.AddTransition(initialToTargetTransition);
+
+            FsmTransition targetToSelfTransition = GivenAnAlwaysValidTransition(targetState);
+            targetState.AddTransition(targetToSelfTransition);
+
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
+            fsm.TryAddState(targetState);
+
+            fsm.Start();
+            fsm.Update();
+            Assert.AreEqual(1, targetState.EnterCounter);
+        }
+
+        [Test]
+        public void Update_Calls_Exit_Function_Of_The_State_We_Are_Leaving()
+        {
+            CounterFsmState initialState = GivenACounterInitializedState("InitialState");
+            NoopFsmState targetState = GivenANoopInitializedState("TargetState");
+
+            FsmTransition initialToTargetTransition = GivenAnAlwaysValidTransition(targetState);
+            initialState.AddTransition(initialToTargetTransition);
+
+            FsmTransition targetToSelfTransition = GivenAnAlwaysValidTransition(targetState);
+            targetState.AddTransition(targetToSelfTransition);
+
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
+            fsm.TryAddState(targetState);
+
+            fsm.Start();
+            fsm.Update();
+            Assert.AreEqual(1, initialState.ExitCounter);
+        }
+
+        [Test]
         public void Update_Returns_State_With_Valid_Transition_For_A_Fsm_With_3_States()
         {
             CounterFsmState initialState = GivenACounterInitializedState("InitialState");
