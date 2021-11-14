@@ -3,7 +3,7 @@ using Fsm.State.Transition;
 
 namespace Fsm.State
 {
-    public class CounterFsmState : FsmStateBase
+    public class CounterFsmState : State
     {
         private int _counter;
         private string _stateName;
@@ -13,7 +13,7 @@ namespace Fsm.State
 
         //public CounterFsmState(string stateName) : base(stateName) {}
 
-        public override FsmStateBase Update()
+        public override State Update()
         {
             try
             {

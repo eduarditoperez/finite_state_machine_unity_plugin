@@ -3,7 +3,7 @@
     /// <summary>
     /// Placeholder state
     /// </summary>
-    public class NoopFsmState : FsmStateBase
+    public class NoopFsmState : State
     {
         //public NoopFsmState(string stateName) : base(stateName) {}
 
@@ -11,7 +11,7 @@
 
         public override void Exit() {}
 
-        public override FsmStateBase Update()
+        public override State Update()
         {
             return this;
         }

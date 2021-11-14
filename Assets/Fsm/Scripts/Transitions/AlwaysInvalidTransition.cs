@@ -2,7 +2,7 @@
 {
     public class AlwaysInvalidTransition : FsmTransition
     {
-        public void Init(FsmStateBase nextState)
+        public void Init(State nextState)
         {
             TransitionName = typeof(AlwaysInvalidTransition).Name;
             NextState = nextState;

@@ -13,15 +13,21 @@ namespace Fsm.State.Transition
         public string description;
 
         public string TransitionName;
-        public FsmStateBase NextState;
+        public State NextState;
         public bool IsValid;
         public string Guid;
 
-        public virtual void Init(string transitionName, FsmStateBase nextState, bool isValid)
+        // TODO: deprecate this
+        public virtual void Init(string transitionName, State nextState, bool isValid)
         {
             TransitionName = transitionName;
             NextState = nextState;
             IsValid = isValid;
+        }
+
+        public virtual FsmTransition Clone()
+        {
+            return ScriptableObject.Instantiate(this);
         }
     }
 }

@@ -26,20 +26,20 @@ namespace Fsm.Core
     [CreateAssetMenu(fileName = "FiniteStateMachine", menuName = "Fsm/Finite State Machine", order = 10)]
     public class FiniteStateMachine : ScriptableObject
     {
-        public List<FsmStateBase> States;
-        public FsmStateBase ActiveState;
-        public FsmStateBase InitialState;
+        public List<State.State> States;
+        public State.State ActiveState;
+        public State.State InitialState;
 
         public IAssetRepository AssetRepository { get; set; }
 
         // TODO: deprecate this function
-        public void Init(FsmStateBase initialState)
+        public void Init(State.State initialState)
         {
             InitialState = initialState;
-            States = new List<FsmStateBase>();
+            States = new List<State.State>();
         }
 
-        public bool TryAddState(FsmStateBase state)
+        public bool TryAddState(State.State state)
         {
             if (HasState(state))
             {
@@ -48,19 +48,21 @@ namespace Fsm.Core
 
             if (States == null)
             {
-                States = new List<FsmStateBase>();
+                States = new List<State.State>();
             }
 
+            // TODO: not tested
             if (state is RootState)
             {
                 InitialState = state;
             }
+
             States.Add(state);
             return true;
         }
 
         // TODO: not tested
-        private bool HasState(FsmStateBase state)
+        private bool HasState(State.State state)
         {
             if (States == null)
             {
@@ -84,7 +86,7 @@ namespace Fsm.Core
         }
 
         // TODO: replace for TryRemove
-        public void RemoveState(FsmStateBase state)
+        public void RemoveState(State.State state)
         {
             if (HasState(state))
             {
@@ -101,7 +103,7 @@ namespace Fsm.Core
 
                 if (stateFound)
                 {
-                    FsmStateBase stateToRemove = States[stateIndex];
+                    State.State stateToRemove = States[stateIndex];
                     States.RemoveAt(stateIndex);
                     AssetRepository.RemoveObjectFromAsset(stateToRemove);
                 }
@@ -127,9 +129,9 @@ namespace Fsm.Core
         }
 
         // TODO: not tested
-        public bool TryCreateState(System.Type stateType, out FsmStateBase state)
+        public bool TryCreateState(System.Type stateType, out State.State state)
         {
-            state = ScriptableObject.CreateInstance(stateType) as FsmStateBase;
+            state = ScriptableObject.CreateInstance(stateType) as State.State;
             state.name = stateType.Name;
             state.Guid = GUID.Generate().ToString();
             state.StateName = stateType.ToString();
@@ -150,7 +152,7 @@ namespace Fsm.Core
         // TODO: not tested
         public bool IsNotEmpty => States != null && States.Count > 0;
 
-        public bool TryAddTransition(FsmStateBase fromState, FsmStateBase toState)
+        public bool TryAddTransition(State.State fromState, State.State toState)
         {
             if (IsEmpty)
             {
@@ -180,7 +182,7 @@ namespace Fsm.Core
             return true;
         }
 
-        public bool HasTransition(FsmStateBase fromState, FsmStateBase toState)
+        public bool HasTransition(State.State fromState, State.State toState)
         {
             bool transitionExists = false;
             if (HasState(fromState) && HasState(toState))
@@ -199,7 +201,7 @@ namespace Fsm.Core
             return transitionExists;
         }
 
-        private FsmTransition CreateTransition(System.Type transitionType, FsmStateBase fromState, FsmStateBase toState)
+        private FsmTransition CreateTransition(System.Type transitionType, State.State fromState, State.State toState)
         {
             string transitionName = $"{fromState.GetType().Name}_to_{toState.GetType().Name}";
             FsmTransition transition = ScriptableObject.CreateInstance(transitionType) as FsmTransition;
@@ -211,7 +213,7 @@ namespace Fsm.Core
             return transition;
         }
 
-        public bool TryRemoveTransition(FsmStateBase fromState, FsmStateBase toState)
+        public bool TryRemoveTransition(State.State fromState, State.State toState)
         {
             if (IsEmpty)
             {
@@ -241,9 +243,17 @@ namespace Fsm.Core
             return false;
         }
 
-        public List<FsmStateBase> GetReachableStates(FsmStateBase state)
+        public List<State.State> GetReachableStates(State.State state)
         {
             return state.Transitions.Select(transition => transition.NextState).ToList();
+        }
+
+        internal FiniteStateMachine Clone()
+        {
+            FiniteStateMachine clone = ScriptableObject.Instantiate(this);
+            States.ForEach(state => clone.TryAddState(state.Clone()));
+
+            return clone;
         }
     }
 }

@@ -9,11 +9,13 @@ namespace Fsm.RunTime
         [SerializeField]
         private FiniteStateMachine _finiteStateMachine;
 
+        [SerializeField]
         private bool _started;
 
         private void Start()
         {
-
+            _finiteStateMachine = _finiteStateMachine.Clone();
+            StartFiniteStateMachine();
         }
 
         private void Update()
@@ -34,14 +36,16 @@ namespace Fsm.RunTime
             }
         }
 
-        public void Run()
+        public void StartFiniteStateMachine()
         {
+            _finiteStateMachine.Start();
             _started = true;
         }
 
-        public void Stop()
+        public void StopFiniteStateMachine()
         {
             _started = false;
+            _finiteStateMachine.Stop();
         }
     }
 }

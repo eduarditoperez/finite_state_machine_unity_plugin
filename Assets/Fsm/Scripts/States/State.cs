@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Fsm.State
 {
     [CreateAssetMenu(fileName = "FsmState", menuName = "Fsm/State", order = 20)]
-    public class FsmStateBase : ScriptableObject
+    public class State : ScriptableObject
     {
         public string StateName;
         public List<FsmTransition> Transitions;
@@ -58,7 +58,15 @@ namespace Fsm.State
         public virtual void Enter() { }
         public virtual void Exit() { }
 
-        public virtual FsmStateBase Update()
+        // TODO: not tested
+        public virtual State Clone()
+        {
+            State clone = ScriptableObject.Instantiate(this);
+            Transitions.ForEach(transition => clone.AddTransition(transition.Clone()));
+            return clone;
+        }
+
+        public virtual State Update()
         {
             if (TryGetValidTransition(out FsmTransition validTransition))
             {
@@ -81,7 +89,7 @@ namespace Fsm.State
             return transition != null;
         }
 
-        public bool IsEquals(FsmStateBase state)
+        public bool IsEquals(State state)
         {
             if (state == null)
             {
@@ -92,7 +100,7 @@ namespace Fsm.State
         }
 
         // TODO: not tested
-        public FsmTransition GetTransitionToState(FsmStateBase state)
+        public FsmTransition GetTransitionToState(State state)
         {
             FsmTransition fsmTransition = null;
             foreach (var transition in Transitions)

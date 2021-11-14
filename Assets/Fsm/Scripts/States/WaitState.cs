@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Fsm.State
 {
-    public class WaitState : FsmStateBase
+    public class WaitState : State
     {
         public float Seconds;
         private float _elapsedSeconds;
@@ -24,7 +24,7 @@ namespace Fsm.State
             ResetElapsedSeconds();
         }
 
-        public override FsmStateBase Update()
+        public override State Update()
         {
             _elapsedSeconds += Time.deltaTime;
             if (_elapsedSeconds < Seconds)
@@ -32,6 +32,7 @@ namespace Fsm.State
                 return this;
             }
 
+            _elapsedSeconds = 0;
             return base.Update();
         }
     }
