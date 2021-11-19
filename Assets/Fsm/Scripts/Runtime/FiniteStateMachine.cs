@@ -35,7 +35,6 @@ namespace Fsm.Core
         private FsmState _currentActiveState;
 
         public IAssetRepository AssetRepository { get; set; }
-        public IUndoRedoUtility UndoRedoUtility { get; set; }
 
         // TODO: deprecate this function
         public void Init(FsmState initialState)
@@ -197,13 +196,9 @@ namespace Fsm.Core
             }
 
             FsmTransition transition = CreateTransition(typeof(FsmTransition), fromState, toState);
-#if UNITY_EDITOR
-            UndoRedoUtility.RecordObject(fromState, "FiniteStateMachine (TryAddTransition)");
-#endif
             fromState.AddTransition(transition);
 #if UNITY_EDITOR
             AssetRepository.AddObjectToAsset(transition, this);
-            UndoRedoUtility.SetDirty(fromState);
 #endif
             return true;
         }

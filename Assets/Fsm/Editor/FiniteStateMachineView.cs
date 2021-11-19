@@ -47,7 +47,6 @@ public class FiniteStateMachineView : GraphView
     {
         _fsm = fsm;
         _fsm.AssetRepository = _assetRepository;
-        _fsm.UndoRedoUtility = _undoRedoUtility;
 
         graphViewChanged -= OnGraphViewChange;
         DeleteElements(graphElements);

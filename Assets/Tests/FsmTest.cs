@@ -364,7 +364,6 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
-            fsm.UndoRedoUtility = GivenAnUndoRedoUtility();
 
             FsmState fromState = GivenAStateBase("FromState");
             FsmState toState = GivenAStateBase("ToState");
@@ -450,7 +449,6 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
-            fsm.UndoRedoUtility = GivenAnUndoRedoUtility();
 
             FsmState fromState = GivenAStateBase("FromState");
             FsmState toState = GivenAStateBase("toState");
@@ -522,7 +520,6 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
-            fsm.UndoRedoUtility = GivenAnUndoRedoUtility();
 
             FsmState fromState = GivenAStateBase("FromState");
             FsmState toState = GivenAStateBase("toState");
