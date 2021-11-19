@@ -7,6 +7,7 @@ using Fsm.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Fsm.Utility;
 
 // TODO: add namespace
 public class FiniteStateMachineView : GraphView
@@ -16,6 +17,7 @@ public class FiniteStateMachineView : GraphView
 
     private FiniteStateMachine _fsm;
     private IAssetRepository _assetRepository;
+    private IUndoRedoUtility _undoRedoUtility;
 
     public FiniteStateMachineView()
     {
@@ -30,6 +32,7 @@ public class FiniteStateMachineView : GraphView
         styleSheets.Add(styleSheet);
 
         _assetRepository = new UnityAssetRepository();
+        _undoRedoUtility = new UnityUndoRedoUtility();
 
         Undo.undoRedoPerformed += OnUndoRedo;
     }
@@ -44,6 +47,7 @@ public class FiniteStateMachineView : GraphView
     {
         _fsm = fsm;
         _fsm.AssetRepository = _assetRepository;
+        _fsm.UndoRedoUtility = _undoRedoUtility;
 
         graphViewChanged -= OnGraphViewChange;
         DeleteElements(graphElements);

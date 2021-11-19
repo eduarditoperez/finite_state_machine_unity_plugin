@@ -6,6 +6,7 @@ using UnityEngine;
 using System;
 using Fsm.Repository;
 using System.Collections.Generic;
+using Fsm.Utility;
 
 public class FsmTest
 {
@@ -363,6 +364,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
+            fsm.UndoRedoUtility = GivenAnUndoRedoUtility();
 
             FsmState fromState = GivenAStateBase("FromState");
             FsmState toState = GivenAStateBase("ToState");
@@ -435,7 +437,7 @@ public class FsmTest
             FsmState toState = GivenAStateBase("ToState");
 
             Assert.False(fsm.TryAddTransition(fromState, toState));
-            
+
             ScriptableObject.DestroyImmediate(fromState);
             ScriptableObject.DestroyImmediate(toState);
         }
@@ -448,6 +450,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
+            fsm.UndoRedoUtility = GivenAnUndoRedoUtility();
 
             FsmState fromState = GivenAStateBase("FromState");
             FsmState toState = GivenAStateBase("toState");
@@ -459,7 +462,7 @@ public class FsmTest
 
             Assert.True(fsm.TryRemoveTransition(fromState, toState));
             Assert.False(fsm.HasTransition(fromState, toState));
-            
+
             ScriptableObject.DestroyImmediate(fromState);
             ScriptableObject.DestroyImmediate(toState);
         }
@@ -519,6 +522,7 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
+            fsm.UndoRedoUtility = GivenAnUndoRedoUtility();
 
             FsmState fromState = GivenAStateBase("FromState");
             FsmState toState = GivenAStateBase("toState");
@@ -539,6 +543,11 @@ public class FsmTest
     private static IAssetRepository GivenAnAssetRepository()
     {
         return new NoopAssetRepository();
+    }
+
+    private static IUndoRedoUtility GivenAnUndoRedoUtility()
+    {
+        return new NoopUndoRedoUtility();
     }
 
     private static FsmState GivenAStateBase(string stateName)
