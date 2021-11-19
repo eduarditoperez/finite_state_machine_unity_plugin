@@ -1,5 +1,6 @@
 using Fsm.Core;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -54,5 +55,16 @@ public class FiniteStateMachineEditor : EditorWindow
     private void OnStateSelectionChanged(StateView stateView)
     {
         _inspectorView.UpdateSelection(stateView);
+    }
+
+    [OnOpenAsset]
+    public static bool OnOpenAsset(int instanteId, int line)
+    {
+        if (Selection.activeObject is FiniteStateMachine)
+        {
+            OpenWindow();
+            return true;
+        }
+        return false;
     }
 }

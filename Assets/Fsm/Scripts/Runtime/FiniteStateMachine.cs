@@ -183,8 +183,8 @@ namespace Fsm.Core
             }
 
             FsmTransition transition = CreateTransition(typeof(FsmTransition), fromState, toState);
+            // TODO: put undo/redo here
             fromState.AddTransition(transition);
-
             AssetRepository.AddObjectToAsset(transition, this);
 
             return true;
@@ -241,8 +241,8 @@ namespace Fsm.Core
             if (HasTransition(fromState, toState))
             {
                 FsmTransition transition = fromState.GetTransitionToState(toState);
+                // TODO: put undo/redo here
                 fromState.RemoveTransition(transition);
-
                 AssetRepository.RemoveObjectFromAsset(transition);
 
                 return true;

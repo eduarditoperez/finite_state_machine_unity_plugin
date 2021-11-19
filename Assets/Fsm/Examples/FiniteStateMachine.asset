@@ -1,23 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8575430081929599532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
-  m_Name: WaitState_to_DebugLogState
-  m_EditorClassIdentifier: 
-  description: 
-  TransitionType: 2
-  TransitionName: WaitState_to_DebugLogState
-  NextState: {fileID: 8254792492760122395}
-  IsValid: 1
-  Guid: ccad3f6c52e01da4a80ae96a16d8f938
 --- !u!114 &-266994934541372913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31,10 +13,9 @@ MonoBehaviour:
   m_Name: WaitState
   m_EditorClassIdentifier: 
   StateName: Fsm.State.WaitState
-  Transitions:
-  - {fileID: -8575430081929599532}
+  Transitions: []
   Guid: cf24f11cf4a3b7d469eb238c8cfab387
-  Position: {x: 279.99997, y: -123.19998}
+  Position: {x: 218.40012, y: 57.20003}
   Seconds: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -52,9 +33,10 @@ MonoBehaviour:
   - {fileID: 8873761846284725520}
   - {fileID: 8254792492760122395}
   - {fileID: -266994934541372913}
+  - {fileID: 884179639543692408}
   ActiveState: {fileID: 0}
   InitialState: {fileID: 8873761846284725520}
---- !u!114 &2052997532334368041
+--- !u!114 &884179639543692408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63,33 +45,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
-  m_Name: DebugLogState_to_WaitState
+  m_Script: {fileID: 11500000, guid: 754a749e252779347bb6be1ca8f62bfa, type: 3}
+  m_Name: EndState
   m_EditorClassIdentifier: 
-  description: 
-  TransitionType: 2
-  TransitionName: DebugLogState_to_WaitState
-  NextState: {fileID: -266994934541372913}
-  IsValid: 1
-  Guid: f85408ec7a5b6564b8d3671bee7113f0
---- !u!114 &2675989124137322509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
-  m_Name: RootState_to_DebugLogState
-  m_EditorClassIdentifier: 
-  description: 
-  TransitionType: 2
-  TransitionName: RootState_to_DebugLogState
-  NextState: {fileID: 8254792492760122395}
-  IsValid: 1
-  Guid: f297dd72b1677d04cb21190f1600a321
+  StateName: Fsm.State.EndState
+  Transitions: []
+  Guid: 7e25db6920771864996b5d8e75bed67d
+  Position: {x: -39.786167, y: 378.69788}
 --- !u!114 &8254792492760122395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,10 +65,9 @@ MonoBehaviour:
   m_Name: DebugLogState
   m_EditorClassIdentifier: 
   StateName: Fsm.State.DebugLogState
-  Transitions:
-  - {fileID: 2052997532334368041}
+  Transitions: []
   Guid: dede9a564e189d240be726e3c022b5a6
-  Position: {x: 279.99997, y: 70.399994}
+  Position: {x: -17.440033, y: 223}
   Message: Hello im a debug log state
 --- !u!114 &8873761846284725520
 MonoBehaviour:
@@ -121,7 +82,6 @@ MonoBehaviour:
   m_Name: RootState
   m_EditorClassIdentifier: 
   StateName: Fsm.State.RootState
-  Transitions:
-  - {fileID: 2675989124137322509}
+  Transitions: []
   Guid: 49917aadc7e4f82499c282d0eee64865
-  Position: {x: 30.965988, y: -6.545988}
+  Position: {x: -157.64148, y: 31.52756}

@@ -30,6 +30,14 @@ public class FiniteStateMachineView : GraphView
         styleSheets.Add(styleSheet);
 
         _assetRepository = new UnityAssetRepository();
+
+        Undo.undoRedoPerformed += OnUndoRedo;
+    }
+
+    private void OnUndoRedo()
+    {
+        PopulateView(_fsm);
+        AssetDatabase.SaveAssets();
     }
 
     internal void PopulateView(FiniteStateMachine fsm)
