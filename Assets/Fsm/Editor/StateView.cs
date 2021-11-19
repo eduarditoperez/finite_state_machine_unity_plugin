@@ -64,8 +64,8 @@ public class StateView : Node
     public override void SetPosition(Rect newPos)
     {
         base.SetPosition(newPos);
-        // TODO: undo/redo for the position. Use an interface
-        Undo.RecordObject(State, "FiniteStateMachine (Set Position)");
+        // Undo/Redo
+        Undo.RecordObject(State, "FiniteStateMachine (SetPosition)");
         State.Position.x = newPos.xMin;
         State.Position.y = newPos.yMin;
         EditorUtility.SetDirty(State);

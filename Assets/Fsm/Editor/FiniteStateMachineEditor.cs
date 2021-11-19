@@ -1,4 +1,5 @@
 using Fsm.Core;
+using Fsm.RunTime;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -45,9 +46,32 @@ public class FiniteStateMachineEditor : EditorWindow
 
     private void OnSelectionChange()
     {
+        Debug.Log("* FiniteStateMachine::OnSelectionChange()");
         FiniteStateMachine fsm = Selection.activeObject as FiniteStateMachine;
-        if (fsm)
+        if (fsm == null && Selection.activeGameObject != null)
         {
+            Debug.Log("** FiniteStateMachine::OnSelectionChange()");
+            if (Selection.activeGameObject
+                .TryGetComponent<FiniteStateMachineRunner>(out FiniteStateMachineRunner runner))
+            {
+                Debug.Log("*** FiniteStateMachine::OnSelectionChange()");
+                fsm = runner.FiniteStateMachine;
+            }
+        }
+
+        if (Application.isPlaying)
+        {
+            Debug.Log("**** FiniteStateMachine::OnSelectionChange()");
+            if (fsm)
+            {
+                _fsmView.PopulateView(fsm);
+            }
+            return;
+        }
+        
+        if (fsm && AssetDatabase.CanOpenForEdit(fsm))
+        {
+            Debug.Log("***** FiniteStateMachine::OnSelectionChange()");
             _fsmView.PopulateView(fsm);
         }
     }

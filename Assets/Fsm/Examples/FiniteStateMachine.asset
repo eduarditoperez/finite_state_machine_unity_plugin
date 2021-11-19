@@ -1,5 +1,55 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7131221012595926190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754a749e252779347bb6be1ca8f62bfa, type: 3}
+  m_Name: EndState
+  m_EditorClassIdentifier: 
+  StateName: Fsm.State.EndState
+  Transitions: []
+  Guid: b8b86c119b972c041b010683df9d5482
+  Position: {x: 147.19998, y: 168}
+--- !u!114 &-5991405783531502329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_DebugLogState_To_WaitState
+  m_EditorClassIdentifier: 
+  description: 
+  TransitionType: 2
+  TransitionName: Transition_From_DebugLogState_To_WaitState
+  NextState: {fileID: -266994934541372913}
+  Guid: d3a54f351e09d9643b44d1794139d53a
+--- !u!114 &-3320880206633278998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_RootState_To_DebugLogState
+  m_EditorClassIdentifier: 
+  description: 
+  TransitionType: 2
+  TransitionName: Transition_From_RootState_To_DebugLogState
+  NextState: {fileID: 8254792492760122395}
+  Guid: 930622c92e616284ea35b46526d7c2a5
 --- !u!114 &-266994934541372913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,9 +63,10 @@ MonoBehaviour:
   m_Name: WaitState
   m_EditorClassIdentifier: 
   StateName: Fsm.State.WaitState
-  Transitions: []
+  Transitions:
+  - {fileID: 1245819099710046673}
   Guid: cf24f11cf4a3b7d469eb238c8cfab387
-  Position: {x: 218.40012, y: 57.20003}
+  Position: {x: 410.67996, y: -7.1999817}
   Seconds: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -33,10 +84,10 @@ MonoBehaviour:
   - {fileID: 8873761846284725520}
   - {fileID: 8254792492760122395}
   - {fileID: -266994934541372913}
-  - {fileID: 884179639543692408}
+  - {fileID: -7131221012595926190}
   ActiveState: {fileID: 0}
   InitialState: {fileID: 8873761846284725520}
---- !u!114 &884179639543692408
+--- !u!114 &1245819099710046673
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,13 +96,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 754a749e252779347bb6be1ca8f62bfa, type: 3}
-  m_Name: EndState
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_WaitState_To_DebugLogState
   m_EditorClassIdentifier: 
-  StateName: Fsm.State.EndState
-  Transitions: []
-  Guid: 7e25db6920771864996b5d8e75bed67d
-  Position: {x: -39.786167, y: 378.69788}
+  description: 
+  TransitionType: 2
+  TransitionName: Transition_From_WaitState_To_DebugLogState
+  NextState: {fileID: 8254792492760122395}
+  Guid: 95f5cd6f20200f041930b46efe6ba923
 --- !u!114 &8254792492760122395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,9 +117,10 @@ MonoBehaviour:
   m_Name: DebugLogState
   m_EditorClassIdentifier: 
   StateName: Fsm.State.DebugLogState
-  Transitions: []
+  Transitions:
+  - {fileID: -5991405783531502329}
   Guid: dede9a564e189d240be726e3c022b5a6
-  Position: {x: -17.440033, y: 223}
+  Position: {x: 147.19997, y: -7.320793}
   Message: Hello im a debug log state
 --- !u!114 &8873761846284725520
 MonoBehaviour:
@@ -82,6 +135,7 @@ MonoBehaviour:
   m_Name: RootState
   m_EditorClassIdentifier: 
   StateName: Fsm.State.RootState
-  Transitions: []
+  Transitions:
+  - {fileID: -3320880206633278998}
   Guid: 49917aadc7e4f82499c282d0eee64865
-  Position: {x: -157.64148, y: 31.52756}
+  Position: {x: 147.20001, y: -201.19998}
