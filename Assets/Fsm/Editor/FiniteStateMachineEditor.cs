@@ -114,4 +114,10 @@ public class FiniteStateMachineEditor : EditorWindow
                 break;
         }
     }
+
+    private void OnInspectorUpdate()
+    {
+        //Note: Putting thing here makes all go slower
+        _fsmView?.UpdateStates();
+    }
 }

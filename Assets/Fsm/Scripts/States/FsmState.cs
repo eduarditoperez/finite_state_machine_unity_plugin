@@ -12,6 +12,7 @@ namespace Fsm.State
         public List<FsmTransition> Transitions;
         public string Guid;
         public Vector2 Position;
+        public FsmStateCondition StateCondition;
 
         public void AddTransition(FsmTransition transition)
         {
@@ -48,8 +49,15 @@ namespace Fsm.State
             return hasTransition;
         }
 
-        public virtual void Enter() { }
-        public virtual void Exit() { }
+        public virtual void Enter()
+        {
+            StateCondition = FsmStateCondition.Running;
+        }
+
+        public virtual void Exit()
+        {
+            StateCondition = FsmStateCondition.Idle;
+        }
 
         public virtual FsmState Clone()
         {

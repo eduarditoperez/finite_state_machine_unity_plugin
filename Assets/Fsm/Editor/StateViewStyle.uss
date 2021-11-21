@@ -115,14 +115,14 @@
     border-bottom-right-radius: 5px;
 }
 
-.running #node-state {
+.Running #node-state {
     background-color: rgb(255, 213, 0);
 }
 
-.success #node-state {
+.Idle #node-state {
     background-color: rgba(60, 212, 0, 0.54);
 }
 
-.failure #node-state {
+.Failure #node-state {
     background-color: rgba(250, 25, 25, 0.67);
 }

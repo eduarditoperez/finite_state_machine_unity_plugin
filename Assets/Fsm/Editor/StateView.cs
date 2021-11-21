@@ -94,4 +94,22 @@ public class StateView : Node
         OnStateSelected?.Invoke(this);
     }
 
+    public void UpdateState()
+    {
+        RemoveFromClassList(FsmStateCondition.Idle.ToString());
+        RemoveFromClassList(FsmStateCondition.Running.ToString());
+
+        if (Application.isPlaying)
+        {
+            switch (State.StateCondition)
+            {
+                case FsmStateCondition.Idle:
+                    AddToClassList(FsmStateCondition.Idle.ToString());
+                    break;
+                case FsmStateCondition.Running:
+                    AddToClassList(FsmStateCondition.Running.ToString());
+                    break;
+            }
+        }
+    }
 }

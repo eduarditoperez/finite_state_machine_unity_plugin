@@ -155,5 +155,12 @@ public class FiniteStateMachineView : GraphView
             endPort.node != startPort.node).ToList();
     }
 
-
+    public void UpdateStates()
+    {
+        nodes.ForEach(node => 
+        {
+            StateView stateView = node as StateView;
+            stateView.UpdateState();
+        });
+    }
 }
