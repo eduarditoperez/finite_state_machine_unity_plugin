@@ -14,9 +14,10 @@ namespace Fsm.State.Transition
         public FsmTransitionType TransitionType;
         public string TransitionName;
         public FsmState NextState;
-        public bool IsValid => IsValidTransition();
         public string Guid;
+        public bool IsValid => IsValidTransition();
 
+        // TODO: should this be setted from outside?
         private ValidatorStrategy _validatorStrategy;
 
         public virtual FsmTransition Clone()
@@ -26,7 +27,6 @@ namespace Fsm.State.Transition
 
         private bool IsValidTransition()
         {
-            ValidatorStrategyProvider.Init();
             _validatorStrategy = ValidatorStrategyProvider.ProvideStrategy(TransitionType);
             return _validatorStrategy.IsValid();
         }

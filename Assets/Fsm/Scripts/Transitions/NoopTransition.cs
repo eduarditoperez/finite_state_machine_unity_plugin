@@ -1,6 +1,6 @@
 ﻿using Fsm.State.Transition;
 
-namespace Fsm.State
+namespace Fsm.State.Transition
 {
     /// <summary>
     /// Place holder transition

@@ -13,13 +13,6 @@ namespace Fsm.State
         public string Guid;
         public Vector2 Position;
 
-        // TODO: Esto lo estamos usando solo para los tests
-        public void Init(string stateName)
-        {
-            StateName = stateName;
-            Transitions = new List<FsmTransition>();
-        }
-
         public void AddTransition(FsmTransition transition)
         {
             if (Transitions == null)
@@ -58,11 +51,14 @@ namespace Fsm.State
         public virtual void Enter() { }
         public virtual void Exit() { }
 
-        // TODO: not tested
         public virtual FsmState Clone()
         {
             FsmState clone = ScriptableObject.Instantiate(this);
-            Transitions.ForEach(transition => clone.AddTransition(transition.Clone()));
+            
+            // Clone all transitions
+            clone.Transitions = new List<FsmTransition>();
+            this.Transitions.ForEach(transition => clone.AddTransition(transition.Clone()));
+
             return clone;
         }
 

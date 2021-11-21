@@ -550,14 +550,14 @@ public class FsmTest
     private static FsmState GivenAStateBase(string stateName)
     {
         FsmState stateBase = ScriptableObject.CreateInstance<FsmState>();
-        stateBase.Init(stateName);
+        stateBase.StateName = stateName;
         return stateBase;
     }
 
     private static NoopFsmState GivenANoopInitializedState(string stateName)
     {
         NoopFsmState state = ScriptableObject.CreateInstance<NoopFsmState>();
-        state.Init(stateName);
+        state.StateName = stateName;
         return state;
     }
 
@@ -571,7 +571,8 @@ public class FsmTest
     private static CounterFsmState GivenACounterInitializedState(string stateName)
     {
         CounterFsmState state = ScriptableObject.CreateInstance<CounterFsmState>();
-        state.Init(stateName);
+        state.StateName = stateName;
+        state.Transitions = new List<FsmTransition>();
         return state;
     }
 

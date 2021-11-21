@@ -36,6 +36,11 @@ namespace Fsm.State.Transition
 
         public static ValidatorStrategy ProvideStrategy(FsmTransitionType fsmTransitionType)
         {
+            if (_strategies == null)
+            {
+                Init();
+            }
+
             _strategies.TryGetValue(fsmTransitionType, out ValidatorStrategy validatorStrategy);
             return validatorStrategy;
         }

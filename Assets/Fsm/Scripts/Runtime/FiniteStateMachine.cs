@@ -229,7 +229,6 @@ namespace Fsm.Core
             transition.name = transitionName;
             transition.NextState = toState;
             transition.TransitionName = transitionName;
-            // TODO: replace GUID because is from the Editor
 #if UNITY_EDITOR
             transition.Guid = GUID.Generate().ToString();
 #endif
@@ -274,13 +273,10 @@ namespace Fsm.Core
 
         internal FiniteStateMachine Clone()
         {
-#if UNITY_EDITOR
+
             FiniteStateMachine clone = ScriptableObject.Instantiate(this);
             States.ForEach(state => clone.TryAddState(state.Clone()));
             return clone;
-#else
-            return null;
-#endif
         }
     }
 }
