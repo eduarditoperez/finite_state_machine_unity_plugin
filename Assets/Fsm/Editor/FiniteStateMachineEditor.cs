@@ -67,7 +67,6 @@ public class FiniteStateMachineEditor : EditorWindow
         
         if (fsm && AssetDatabase.CanOpenForEdit(fsm))
         {
-            Debug.Log("***** FiniteStateMachine::OnSelectionChange()");
             _fsmView.PopulateView(fsm);
         }
     }
