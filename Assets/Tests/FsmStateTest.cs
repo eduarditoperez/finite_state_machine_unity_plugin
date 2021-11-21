@@ -213,6 +213,29 @@ namespace Fsm.State.Test
                     Assert.IsTrue(t.name.Contains("Clone"));
                 }
             }
+
+            [Test]
+            public void Clone_A_State_With_Two_Transitions_Create_A_Clone_Of_The_State()
+            {
+                FsmState stateA = GivenAnFsmState("stateA");
+                FsmState stateB = GivenAnFsmState("stateB");
+
+                stateA.AddTransition(GivenAnAlwaysValidTransition(stateB));
+                stateA.AddTransition(GivenAnAlwaysInvalidTransition(stateA));
+
+                stateB.AddTransition(GivenAnAlwaysValidTransition(stateA));
+                stateB.AddTransition(GivenAnAlwaysInvalidTransition(stateB));
+
+                FsmState clone = stateA.Clone();
+
+                Assert.IsNotNull(clone);
+                Assert.IsTrue(clone.name.Contains("Clone"));
+
+                foreach (FsmTransition t in clone.Transitions)
+                {
+                    Assert.IsTrue(t.name.Contains("Clone"));
+                }
+            }
         }
 
         private static FsmState GivenAnFsmState(string stateName)

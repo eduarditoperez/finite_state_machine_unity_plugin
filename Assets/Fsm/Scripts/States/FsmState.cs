@@ -58,7 +58,6 @@ namespace Fsm.State
             // Clone all transitions
             clone.Transitions = new List<FsmTransition>();
             this.Transitions.ForEach(transition => clone.AddTransition(transition.Clone()));
-
             return clone;
         }
 
