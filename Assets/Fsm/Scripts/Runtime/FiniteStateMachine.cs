@@ -89,6 +89,7 @@ namespace Fsm.Core
             return hasTheState;
         }
 
+#if UNITY_EDITOR
         // TODO: replace for TryRemove
         public void RemoveState(FsmState state)
         {
@@ -109,12 +110,12 @@ namespace Fsm.Core
                 {
                     FsmState stateToRemove = States[stateIndex];
                     States.RemoveAt(stateIndex);
-#if UNITY_EDITOR
+
                     AssetRepository.RemoveObjectFromAsset(stateToRemove);
-#endif
                 }
             }
         }
+#endif
 
         public void Start()
         {
@@ -141,38 +142,32 @@ namespace Fsm.Core
             }
         }
 
+#if UNITY_EDITOR
         // TODO: not tested
         public bool TryCreateState(System.Type stateType, out FsmState state)
         {
             state = ScriptableObject.CreateInstance(stateType) as FsmState;
             state.name = stateType.Name;
-            // TODO: GUID is from the Editor, replace with an interface
-#if UNITY_EDITOR
             state.Guid = GUID.Generate().ToString();
-#else
-            state.Guid = string.Empty;
-#endif
             state.StateName = stateType.ToString();
 
             if (TryAddState(state))
             {
-#if UNITY_EDITOR
                 AssetRepository.AddObjectToAsset(state, this);
-#endif
-                return true;
             }
-#if UNITY_EDITOR
+
             ScriptableObject.DestroyImmediate(state);
-#endif
             state = null;
             return false;
         }
+#endif
 
         // TODO: not tested
         public bool IsEmpty => !IsNotEmpty;
         // TODO: not tested
         public bool IsNotEmpty => States != null && States.Count > 0;
 
+#if UNITY_EDITOR
         public bool TryAddTransition(FsmState fromState, FsmState toState)
         {
             if (IsEmpty)
@@ -197,11 +192,10 @@ namespace Fsm.Core
 
             FsmTransition transition = CreateTransition(typeof(FsmTransition), fromState, toState);
             fromState.AddTransition(transition);
-#if UNITY_EDITOR
             AssetRepository.AddObjectToAsset(transition, this);
-#endif
             return true;
         }
+#endif
 
         public bool HasTransition(FsmState fromState, FsmState toState)
         {
@@ -222,6 +216,7 @@ namespace Fsm.Core
             return transitionExists;
         }
 
+#if UNITY_EDITOR
         private FsmTransition CreateTransition(System.Type transitionType, FsmState fromState, State.FsmState toState)
         {
             string transitionName = $"Transition_From_{fromState.GetType().Name}_To_{toState.GetType().Name}";
@@ -229,9 +224,7 @@ namespace Fsm.Core
             transition.name = transitionName;
             transition.NextState = toState;
             transition.TransitionName = transitionName;
-#if UNITY_EDITOR
             transition.Guid = GUID.Generate().ToString();
-#endif
             return transition;
         }
 
@@ -257,14 +250,12 @@ namespace Fsm.Core
                 FsmTransition transition = fromState.GetTransitionToState(toState);
                 // TODO: put undo/redo here
                 fromState.RemoveTransition(transition);
-#if UNITY_EDITOR
                 AssetRepository.RemoveObjectFromAsset(transition);
-#endif
                 return true;
             }
-
             return false;
         }
+#endif
 
         public List<FsmState> GetReachableStates(FsmState state)
         {

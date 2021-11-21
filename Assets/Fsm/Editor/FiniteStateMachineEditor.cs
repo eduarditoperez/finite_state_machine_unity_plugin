@@ -86,4 +86,32 @@ public class FiniteStateMachineEditor : EditorWindow
         }
         return false;
     }
+
+    private void OnEnable()
+    {
+        EditorApplication.playModeStateChanged -= OnPlayModeStateChange;
+        EditorApplication.playModeStateChanged += OnPlayModeStateChange;
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.playModeStateChanged -= OnPlayModeStateChange;
+    }
+
+    private void OnPlayModeStateChange(PlayModeStateChange playModeStateChange)
+    {
+        switch (playModeStateChange)
+        {
+            case PlayModeStateChange.EnteredEditMode:
+                OnSelectionChange();
+                break;
+            case PlayModeStateChange.ExitingEditMode:
+                break;
+            case PlayModeStateChange.EnteredPlayMode:
+                OnSelectionChange();
+                break;
+            case PlayModeStateChange.ExitingPlayMode:
+                break;
+        }
+    }
 }

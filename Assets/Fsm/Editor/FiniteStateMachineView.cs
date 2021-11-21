@@ -137,6 +137,11 @@ public class FiniteStateMachineView : GraphView
 
     private void CreateState(System.Type stateType)
     {
+        if (EditorApplication.isPlaying)
+        {
+            return;
+        }
+
         if (_fsm.TryCreateState(stateType, out FsmState state))
         {
             CreateStateView(state);
