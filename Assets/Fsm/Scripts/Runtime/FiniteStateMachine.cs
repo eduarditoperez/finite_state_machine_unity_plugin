@@ -271,10 +271,10 @@ namespace Fsm.Core
             return state.Transitions.Select(transition => transition.NextState).ToList();
         }
 
-        internal FiniteStateMachine Clone()
+        public FiniteStateMachine Clone()
         {
-
             FiniteStateMachine clone = ScriptableObject.Instantiate(this);
+            clone.States = new List<FsmState>();
             States.ForEach(state => clone.TryAddState(state.Clone()));
             return clone;
         }

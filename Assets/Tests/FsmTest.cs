@@ -537,6 +537,35 @@ public class FsmTest
         }
     }
 
+    public class CloneTests
+    {
+        [Test]
+        public void Clone_Clones_An_FSM_With_2_States()
+        {
+            CounterFsmState initialState = GivenACounterInitializedState("InitialState");
+            NoopFsmState targetState = GivenANoopInitializedState("TargetState");
+
+            FsmTransition initialToTargetTransition = GivenAnAlwaysValidTransition(targetState);
+            initialState.AddTransition(initialToTargetTransition);
+
+            FsmTransition targetToSelfTransition = GivenAnAlwaysValidTransition(targetState);
+            targetState.AddTransition(targetToSelfTransition);
+
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
+            fsm.TryAddState(targetState);
+
+            FiniteStateMachine clone = fsm.Clone();
+
+            Assert.NotNull(clone);
+            Assert.IsTrue(clone.name.Contains("Clone"));
+
+            foreach (FsmState state in clone.States)
+            {
+                Assert.IsTrue(state.name.Contains("Clone"));
+            }
+        }
+    }
+
     private static IAssetRepository GivenAnAssetRepository()
     {
         return new NoopAssetRepository();
