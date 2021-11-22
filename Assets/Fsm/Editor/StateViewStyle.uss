@@ -20,7 +20,6 @@
 
 #output {
     align-items: center;
-    background-color: rgb(77, 77, 77);
 }
 
 #selection-border {

@@ -16,7 +16,7 @@ MonoBehaviour:
   Transitions: []
   Guid: b8b86c119b972c041b010683df9d5482
   Position: {x: 389.59995, y: 243.66002}
-  StateCondition: 0
+  StateCondition: 1
   Description: 
 --- !u!114 &-5991405783531502329
 MonoBehaviour:
@@ -86,8 +86,8 @@ MonoBehaviour:
   - {fileID: 1245819099710046673}
   - {fileID: -4046633003542815439}
   Guid: cf24f11cf4a3b7d469eb238c8cfab387
-  Position: {x: 390.39996, y: -19.19997}
-  StateCondition: 1
+  Position: {x: 389.59998, y: -19.199997}
+  StateCondition: 0
   Description: 
   Seconds: 1
 --- !u!114 &11400000

@@ -59,7 +59,7 @@ public class StateView : Node
         {
             OutputPort.name = string.Empty;
             OutputPort.style.flexDirection = FlexDirection.ColumnReverse;
-            inputContainer.Add(OutputPort);
+            outputContainer.Add(OutputPort);
         }
     }
 
