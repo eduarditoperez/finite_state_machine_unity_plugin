@@ -15,7 +15,7 @@ MonoBehaviour:
   StateName: Fsm.State.EndState
   Transitions: []
   Guid: b8b86c119b972c041b010683df9d5482
-  Position: {x: 389.59995, y: 243.66002}
+  Position: {x: 422.40002, y: 248}
   StateCondition: 1
   Description: 
 --- !u!114 &-5991405783531502329
@@ -86,7 +86,7 @@ MonoBehaviour:
   - {fileID: 1245819099710046673}
   - {fileID: -4046633003542815439}
   Guid: cf24f11cf4a3b7d469eb238c8cfab387
-  Position: {x: 389.59998, y: -19.199997}
+  Position: {x: 422.4001, y: 19.999992}
   StateCondition: 0
   Description: 
   Seconds: 1
@@ -142,7 +142,7 @@ MonoBehaviour:
   Transitions:
   - {fileID: -5991405783531502329}
   Guid: dede9a564e189d240be726e3c022b5a6
-  Position: {x: 147.20001, y: -19.19997}
+  Position: {x: 147.20001, y: 20}
   StateCondition: 0
   Description: 
   Message: Hello im a debug log state
@@ -164,4 +164,4 @@ MonoBehaviour:
   Guid: 49917aadc7e4f82499c282d0eee64865
   Position: {x: 147.20001, y: -200.79999}
   StateCondition: 0
-  Description: 
+  Description: All starts here

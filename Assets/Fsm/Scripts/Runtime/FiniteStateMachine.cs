@@ -154,6 +154,7 @@ namespace Fsm.Core
             if (TryAddState(state))
             {
                 AssetRepository.AddObjectToAsset(state, this);
+                return true;
             }
 
             ScriptableObject.DestroyImmediate(state);

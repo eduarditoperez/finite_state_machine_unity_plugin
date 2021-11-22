@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Fsm.Utility;
+using UnityEngine;
 
 // TODO: add namespace
 public class FiniteStateMachineView : GraphView
@@ -137,7 +138,7 @@ public class FiniteStateMachineView : GraphView
 
     private void CreateState(System.Type stateType)
     {
-        if (EditorApplication.isPlaying)
+        if (Application.isPlaying)
         {
             return;
         }
