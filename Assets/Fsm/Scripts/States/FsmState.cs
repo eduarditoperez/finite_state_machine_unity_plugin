@@ -1,5 +1,4 @@
 ﻿using Fsm.State.Transition;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +12,7 @@ namespace Fsm.State
         public string Guid;
         public Vector2 Position;
         public FsmStateCondition StateCondition;
+        public string Description;
 
         public void AddTransition(FsmTransition transition)
         {

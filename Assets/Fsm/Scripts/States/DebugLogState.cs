@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Threading.Tasks;
 
 namespace Fsm.State
 {
@@ -12,6 +12,16 @@ namespace Fsm.State
         {
             Debug.Log(Message);
             return base.Update();
+        }
+
+        public override void Enter()
+        {
+            base.Enter();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
         }
     }
 }

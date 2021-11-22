@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _finiteStateMachine: {fileID: 11400000, guid: 6b785cce8f6d6e34fbbe53fe25dc2bf6, type: 2}
+  _started: 0
 --- !u!4 &103732283
 Transform:
   m_ObjectHideFlags: 0

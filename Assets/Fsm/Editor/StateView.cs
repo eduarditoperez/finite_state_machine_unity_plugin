@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 // TODO: add namespace
@@ -27,6 +28,7 @@ public class StateView : Node
         CreateInputPorts();
         CreateOutputPorts();
         SetupStates();
+        SetupDataBindings();
     }
 
     private void CreateInputPorts()
@@ -111,5 +113,16 @@ public class StateView : Node
                     break;
             }
         }
+    }
+
+    private void SetupDataBindings()
+    {
+        Label descriptionLabel = this.Q<Label>("description");
+        descriptionLabel.bindingPath = "Description";
+        descriptionLabel.Bind(new SerializedObject(State));
+
+        Label stateConditionLabel = this.Q<Label>("state-condition");
+        stateConditionLabel.bindingPath = "StateCondition";
+        stateConditionLabel.Bind(new SerializedObject(State));
     }
 }

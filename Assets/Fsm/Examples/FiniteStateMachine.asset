@@ -15,7 +15,9 @@ MonoBehaviour:
   StateName: Fsm.State.EndState
   Transitions: []
   Guid: b8b86c119b972c041b010683df9d5482
-  Position: {x: 147.19998, y: 168}
+  Position: {x: 389.59995, y: 243.66002}
+  StateCondition: 0
+  Description: 
 --- !u!114 &-5991405783531502329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33,6 +35,23 @@ MonoBehaviour:
   TransitionName: Transition_From_DebugLogState_To_WaitState
   NextState: {fileID: -266994934541372913}
   Guid: d3a54f351e09d9643b44d1794139d53a
+--- !u!114 &-4046633003542815439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_WaitState_To_EndState
+  m_EditorClassIdentifier: 
+  description: 
+  TransitionType: 2
+  TransitionName: Transition_From_WaitState_To_EndState
+  NextState: {fileID: -7131221012595926190}
+  Guid: 3cec10b6ad00c9b45ba54b38d1f74857
 --- !u!114 &-3320880206633278998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,8 +84,11 @@ MonoBehaviour:
   StateName: Fsm.State.WaitState
   Transitions:
   - {fileID: 1245819099710046673}
+  - {fileID: -4046633003542815439}
   Guid: cf24f11cf4a3b7d469eb238c8cfab387
-  Position: {x: 410.67996, y: -7.1999817}
+  Position: {x: 390.39996, y: -19.19997}
+  StateCondition: 1
+  Description: 
   Seconds: 1
 --- !u!114 &11400000
 MonoBehaviour:
@@ -100,7 +122,7 @@ MonoBehaviour:
   m_Name: Transition_From_WaitState_To_DebugLogState
   m_EditorClassIdentifier: 
   description: 
-  TransitionType: 2
+  TransitionType: 1
   TransitionName: Transition_From_WaitState_To_DebugLogState
   NextState: {fileID: 8254792492760122395}
   Guid: 95f5cd6f20200f041930b46efe6ba923
@@ -120,7 +142,9 @@ MonoBehaviour:
   Transitions:
   - {fileID: -5991405783531502329}
   Guid: dede9a564e189d240be726e3c022b5a6
-  Position: {x: 147.19997, y: -7.320793}
+  Position: {x: 147.20001, y: -19.19997}
+  StateCondition: 0
+  Description: 
   Message: Hello im a debug log state
 --- !u!114 &8873761846284725520
 MonoBehaviour:
@@ -138,4 +162,6 @@ MonoBehaviour:
   Transitions:
   - {fileID: -3320880206633278998}
   Guid: 49917aadc7e4f82499c282d0eee64865
-  Position: {x: 147.20001, y: -201.19998}
+  Position: {x: 147.20001, y: -200.79999}
+  StateCondition: 0
+  Description: 

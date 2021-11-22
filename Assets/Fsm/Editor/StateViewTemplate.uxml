@@ -16,6 +16,7 @@
                     <ui:Label display-tooltip-when-elided="true" name="description" />
                 </ui:VisualElement>
                 <ui:Label text="This is the node description" display-tooltip-when-elided="true" name="description" />
+                <ui:Label text="State condition" display-tooltip-when-elided="true" name="state-condition" />
                 <ui:VisualElement name="divider" class="vertical" style="min-height: 1px;" />
                 <ui:VisualElement name="output" style="min-height: auto;" />
             </ui:VisualElement>

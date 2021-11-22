@@ -238,6 +238,53 @@ namespace Fsm.State.Test
             }
         }
 
+        public class EnterTests
+        {
+            [Test]
+            public void Enter_Sets_StateCondition_To_Running()
+            {
+                FsmState fsmState = GivenAnFsmState("aState");
+
+                Assert.AreEqual(FsmStateCondition.Idle, fsmState.StateCondition);
+
+                fsmState.Enter();
+
+                Assert.AreEqual(FsmStateCondition.Running, fsmState.StateCondition);
+            }
+        }
+
+        public class ExitTests
+        {
+            [Test]
+            public void Exit_Sets_StateCondition_To_Idle()
+            {
+                FsmState fsmState = GivenAnFsmState("aState");
+
+                Assert.AreEqual(FsmStateCondition.Idle, fsmState.StateCondition);
+
+                fsmState.Exit();
+
+                Assert.AreEqual(FsmStateCondition.Idle, fsmState.StateCondition);
+            }
+
+            [Test]
+            public void Exit__After_Enter_Sets_StateCondition_To_Idle()
+            {
+                FsmState fsmState = GivenAnFsmState("aState");
+
+                Assert.AreEqual(FsmStateCondition.Idle, fsmState.StateCondition);
+
+                fsmState.Enter();
+
+                Assert.AreEqual(FsmStateCondition.Running, fsmState.StateCondition);
+
+                fsmState.Exit();
+
+                Assert.AreEqual(FsmStateCondition.Idle, fsmState.StateCondition);
+
+            }
+        }
+
         private static FsmState GivenAnFsmState(string stateName)
         {
             FsmState fsmState = ScriptableObject.CreateInstance<FsmState>();
