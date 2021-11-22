@@ -6,7 +6,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-// TODO: add namespace
+// TODO: add namespace and rename to FsmStateView
 public class StateView : Node
 {
     public Action<StateView> OnStateSelected;
