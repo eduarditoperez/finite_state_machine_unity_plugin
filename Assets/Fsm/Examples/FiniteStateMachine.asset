@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7131221012595926190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754a749e252779347bb6be1ca8f62bfa, type: 3}
+  m_Name: EndState
+  m_EditorClassIdentifier: 
+  StateName: Fsm.State.EndState
+  Transitions: []
+  Guid: b8b86c119b972c041b010683df9d5482
+  Position: {x: 422.40002, y: 248}
+  StateCondition: 1
+  Description: 
+--- !u!114 &-5991405783531502329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_DebugLogState_To_WaitState
+  m_EditorClassIdentifier: 
+  description: 
+  TransitionType: 2
+  TransitionName: Transition_From_DebugLogState_To_WaitState
+  NextState: {fileID: -266994934541372913}
+  Guid: d3a54f351e09d9643b44d1794139d53a
+--- !u!114 &-4046633003542815439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_WaitState_To_EndState
+  m_EditorClassIdentifier: 
+  description: 
+  TransitionType: 2
+  TransitionName: Transition_From_WaitState_To_EndState
+  NextState: {fileID: -7131221012595926190}
+  Guid: 3cec10b6ad00c9b45ba54b38d1f74857
+--- !u!114 &-3320880206633278998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_RootState_To_DebugLogState
+  m_EditorClassIdentifier: 
+  description: 
+  TransitionType: 2
+  TransitionName: Transition_From_RootState_To_DebugLogState
+  NextState: {fileID: 8254792492760122395}
+  Guid: 930622c92e616284ea35b46526d7c2a5
+--- !u!114 &-266994934541372913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be3b4fd29d3a5145b360600466cc637, type: 3}
+  m_Name: WaitState
+  m_EditorClassIdentifier: 
+  StateName: Fsm.State.WaitState
+  Transitions:
+  - {fileID: 1245819099710046673}
+  - {fileID: -4046633003542815439}
+  Guid: cf24f11cf4a3b7d469eb238c8cfab387
+  Position: {x: 422.4001, y: 19.999992}
+  StateCondition: 0
+  Description: 
+  Seconds: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f680710aa82b4642a20e48322918087, type: 3}
+  m_Name: FiniteStateMachine
+  m_EditorClassIdentifier: 
+  States:
+  - {fileID: 8873761846284725520}
+  - {fileID: 8254792492760122395}
+  - {fileID: -266994934541372913}
+  - {fileID: -7131221012595926190}
+  ActiveState: {fileID: 0}
+  InitialState: {fileID: 8873761846284725520}
+--- !u!114 &1245819099710046673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 842bacf7980b92947b3d059085b5f1a2, type: 3}
+  m_Name: Transition_From_WaitState_To_DebugLogState
+  m_EditorClassIdentifier: 
+  description: 
+  TransitionType: 1
+  TransitionName: Transition_From_WaitState_To_DebugLogState
+  NextState: {fileID: 8254792492760122395}
+  Guid: 95f5cd6f20200f041930b46efe6ba923
+--- !u!114 &8254792492760122395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f51e75152fba8a41aa28c90c4af29a6, type: 3}
+  m_Name: DebugLogState
+  m_EditorClassIdentifier: 
+  StateName: Fsm.State.DebugLogState
+  Transitions:
+  - {fileID: -5991405783531502329}
+  Guid: dede9a564e189d240be726e3c022b5a6
+  Position: {x: 147.20001, y: 20}
+  StateCondition: 0
+  Description: 
+  Message: Hello im a debug log state
+--- !u!114 &8873761846284725520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e8336999747a354182bb49b3f4c3c21, type: 3}
+  m_Name: RootState
+  m_EditorClassIdentifier: 
+  StateName: Fsm.State.RootState
+  Transitions:
+  - {fileID: -3320880206633278998}
+  Guid: 49917aadc7e4f82499c282d0eee64865
+  Position: {x: 147.20001, y: -200.79999}
+  StateCondition: 0
+  Description: All starts here
