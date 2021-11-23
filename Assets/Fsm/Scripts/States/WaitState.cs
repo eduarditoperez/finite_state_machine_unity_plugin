@@ -11,6 +11,7 @@ namespace Fsm.State
 
         public override void Enter()
         {
+            base.Enter();
             ResetElapsedSeconds();
         }
 
@@ -21,6 +22,7 @@ namespace Fsm.State
 
         public override void Exit()
         {
+            base.Exit();
             ResetElapsedSeconds();
         }
 

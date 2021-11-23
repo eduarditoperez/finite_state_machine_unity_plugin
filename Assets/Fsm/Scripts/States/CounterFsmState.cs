@@ -14,11 +14,13 @@ namespace Fsm.State
 
         public override void Enter()
         {
+            base.Enter();
             EnterCounter++;
         }
 
         public override void Exit()
         {
+            base.Exit();
             ExitCounter++;
         }
 

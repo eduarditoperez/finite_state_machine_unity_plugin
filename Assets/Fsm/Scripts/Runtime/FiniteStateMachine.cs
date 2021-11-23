@@ -3,8 +3,11 @@ using Fsm.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using Fsm.State.Transition;
+using Fsm.Utility;
 
 namespace Fsm.Core
 {
@@ -25,22 +28,22 @@ namespace Fsm.Core
     [CreateAssetMenu(fileName = "FiniteStateMachine", menuName = "Fsm/Finite State Machine", order = 10)]
     public class FiniteStateMachine : ScriptableObject
     {
-        public List<Fsm.State.FsmState> States;
-        public Fsm.State.FsmState ActiveState;
-        public Fsm.State.FsmState InitialState;
+        public List<FsmState> States;
+        public FsmState ActiveState;
+        public FsmState InitialState;
 
-        private Fsm.State.FsmState _currentActiveState;
+        private FsmState _currentActiveState;
 
         public IAssetRepository AssetRepository { get; set; }
 
         // TODO: deprecate this function
-        public void Init(Fsm.State.FsmState initialState)
+        public void Init(FsmState initialState)
         {
             InitialState = initialState;
-            States = new List<Fsm.State.FsmState>();
+            States = new List<FsmState>();
         }
 
-        public bool TryAddState(Fsm.State.FsmState state)
+        public bool TryAddState(FsmState state)
         {
             if (HasState(state))
             {
@@ -49,7 +52,7 @@ namespace Fsm.Core
 
             if (States == null)
             {
-                States = new List<Fsm.State.FsmState>();
+                States = new List<FsmState>();
             }
 
             // TODO: not tested
@@ -63,7 +66,7 @@ namespace Fsm.Core
         }
 
         // TODO: not tested
-        private bool HasState(Fsm.State.FsmState state)
+        private bool HasState(FsmState state)
         {
             if (States == null)
             {
@@ -86,8 +89,9 @@ namespace Fsm.Core
             return hasTheState;
         }
 
+#if UNITY_EDITOR
         // TODO: replace for TryRemove
-        public void RemoveState(Fsm.State.FsmState state)
+        public void RemoveState(FsmState state)
         {
             if (HasState(state))
             {
@@ -104,12 +108,14 @@ namespace Fsm.Core
 
                 if (stateFound)
                 {
-                    Fsm.State.FsmState stateToRemove = States[stateIndex];
+                    FsmState stateToRemove = States[stateIndex];
                     States.RemoveAt(stateIndex);
+
                     AssetRepository.RemoveObjectFromAsset(stateToRemove);
                 }
             }
         }
+#endif
 
         public void Start()
         {
@@ -136,10 +142,11 @@ namespace Fsm.Core
             }
         }
 
+#if UNITY_EDITOR
         // TODO: not tested
-        public bool TryCreateState(System.Type stateType, out State.FsmState state)
+        public bool TryCreateState(System.Type stateType, out FsmState state)
         {
-            state = ScriptableObject.CreateInstance(stateType) as State.FsmState;
+            state = ScriptableObject.CreateInstance(stateType) as FsmState;
             state.name = stateType.Name;
             state.Guid = GUID.Generate().ToString();
             state.StateName = stateType.ToString();
@@ -154,13 +161,15 @@ namespace Fsm.Core
             state = null;
             return false;
         }
+#endif
 
         // TODO: not tested
         public bool IsEmpty => !IsNotEmpty;
         // TODO: not tested
         public bool IsNotEmpty => States != null && States.Count > 0;
 
-        public bool TryAddTransition(State.FsmState fromState, State.FsmState toState)
+#if UNITY_EDITOR
+        public bool TryAddTransition(FsmState fromState, FsmState toState)
         {
             if (IsEmpty)
             {
@@ -184,13 +193,12 @@ namespace Fsm.Core
 
             FsmTransition transition = CreateTransition(typeof(FsmTransition), fromState, toState);
             fromState.AddTransition(transition);
-
             AssetRepository.AddObjectToAsset(transition, this);
-
             return true;
         }
+#endif
 
-        public bool HasTransition(State.FsmState fromState, State.FsmState toState)
+        public bool HasTransition(FsmState fromState, FsmState toState)
         {
             bool transitionExists = false;
             if (HasState(fromState) && HasState(toState))
@@ -209,19 +217,19 @@ namespace Fsm.Core
             return transitionExists;
         }
 
-        private FsmTransition CreateTransition(System.Type transitionType, State.FsmState fromState, State.FsmState toState)
+#if UNITY_EDITOR
+        private FsmTransition CreateTransition(System.Type transitionType, FsmState fromState, State.FsmState toState)
         {
-            string transitionName = $"{fromState.GetType().Name}_to_{toState.GetType().Name}";
+            string transitionName = $"Transition_From_{fromState.GetType().Name}_To_{toState.GetType().Name}";
             FsmTransition transition = ScriptableObject.CreateInstance(transitionType) as FsmTransition;
             transition.name = transitionName;
             transition.NextState = toState;
             transition.TransitionName = transitionName;
             transition.Guid = GUID.Generate().ToString();
-
             return transition;
         }
 
-        public bool TryRemoveTransition(State.FsmState fromState, State.FsmState toState)
+        public bool TryRemoveTransition(FsmState fromState, FsmState toState)
         {
             if (IsEmpty)
             {
@@ -241,26 +249,25 @@ namespace Fsm.Core
             if (HasTransition(fromState, toState))
             {
                 FsmTransition transition = fromState.GetTransitionToState(toState);
+                // TODO: put undo/redo here
                 fromState.RemoveTransition(transition);
-
                 AssetRepository.RemoveObjectFromAsset(transition);
-
                 return true;
             }
-
             return false;
         }
+#endif
 
-        public List<State.FsmState> GetReachableStates(State.FsmState state)
+        public List<FsmState> GetReachableStates(FsmState state)
         {
             return state.Transitions.Select(transition => transition.NextState).ToList();
         }
 
-        internal FiniteStateMachine Clone()
+        public FiniteStateMachine Clone()
         {
             FiniteStateMachine clone = ScriptableObject.Instantiate(this);
+            clone.States = new List<FsmState>();
             States.ForEach(state => clone.TryAddState(state.Clone()));
-
             return clone;
         }
     }

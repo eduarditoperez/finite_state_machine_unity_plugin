@@ -6,6 +6,8 @@ namespace Fsm.RunTime
 {
     public class FiniteStateMachineRunner : MonoBehaviour
     {
+        public FiniteStateMachine FiniteStateMachine => _finiteStateMachine;
+
         [SerializeField]
         private FiniteStateMachine _finiteStateMachine;
 

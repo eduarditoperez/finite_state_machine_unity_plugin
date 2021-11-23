@@ -1,5 +1,7 @@
 using Fsm.Core;
+using Fsm.RunTime;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,7 +47,25 @@ public class FiniteStateMachineEditor : EditorWindow
     private void OnSelectionChange()
     {
         FiniteStateMachine fsm = Selection.activeObject as FiniteStateMachine;
-        if (fsm)
+        if (fsm == null && Selection.activeGameObject != null)
+        {
+            if (Selection.activeGameObject
+                .TryGetComponent<FiniteStateMachineRunner>(out FiniteStateMachineRunner runner))
+            {
+                fsm = runner.FiniteStateMachine;
+            }
+        }
+
+        if (Application.isPlaying)
+        {
+            if (fsm)
+            {
+                _fsmView.PopulateView(fsm);
+            }
+            return;
+        }
+        
+        if (fsm && AssetDatabase.CanOpenForEdit(fsm))
         {
             _fsmView.PopulateView(fsm);
         }
@@ -54,5 +74,50 @@ public class FiniteStateMachineEditor : EditorWindow
     private void OnStateSelectionChanged(StateView stateView)
     {
         _inspectorView.UpdateSelection(stateView);
+    }
+
+    [OnOpenAsset]
+    public static bool OnOpenAsset(int instanteId, int line)
+    {
+        if (Selection.activeObject is FiniteStateMachine)
+        {
+            OpenWindow();
+            return true;
+        }
+        return false;
+    }
+
+    private void OnEnable()
+    {
+        EditorApplication.playModeStateChanged -= OnPlayModeStateChange;
+        EditorApplication.playModeStateChanged += OnPlayModeStateChange;
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.playModeStateChanged -= OnPlayModeStateChange;
+    }
+
+    private void OnPlayModeStateChange(PlayModeStateChange playModeStateChange)
+    {
+        switch (playModeStateChange)
+        {
+            case PlayModeStateChange.EnteredEditMode:
+                OnSelectionChange();
+                break;
+            case PlayModeStateChange.ExitingEditMode:
+                break;
+            case PlayModeStateChange.EnteredPlayMode:
+                OnSelectionChange();
+                break;
+            case PlayModeStateChange.ExitingPlayMode:
+                break;
+        }
+    }
+
+    private void OnInspectorUpdate()
+    {
+        //Note: Putting thing here makes all go slower
+        _fsmView?.UpdateStates();
     }
 }

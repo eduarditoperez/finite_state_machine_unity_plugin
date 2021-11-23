@@ -6,6 +6,7 @@ using UnityEngine;
 using System;
 using Fsm.Repository;
 using System.Collections.Generic;
+using Fsm.Utility;
 
 public class FsmTest
 {
@@ -435,7 +436,7 @@ public class FsmTest
             FsmState toState = GivenAStateBase("ToState");
 
             Assert.False(fsm.TryAddTransition(fromState, toState));
-            
+
             ScriptableObject.DestroyImmediate(fromState);
             ScriptableObject.DestroyImmediate(toState);
         }
@@ -459,7 +460,7 @@ public class FsmTest
 
             Assert.True(fsm.TryRemoveTransition(fromState, toState));
             Assert.False(fsm.HasTransition(fromState, toState));
-            
+
             ScriptableObject.DestroyImmediate(fromState);
             ScriptableObject.DestroyImmediate(toState);
         }
@@ -536,22 +537,56 @@ public class FsmTest
         }
     }
 
+    public class CloneTests
+    {
+        [Test]
+        public void Clone_Clones_An_FSM_With_2_States()
+        {
+            CounterFsmState initialState = GivenACounterInitializedState("InitialState");
+            NoopFsmState targetState = GivenANoopInitializedState("TargetState");
+
+            FsmTransition initialToTargetTransition = GivenAnAlwaysValidTransition(targetState);
+            initialState.AddTransition(initialToTargetTransition);
+
+            FsmTransition targetToSelfTransition = GivenAnAlwaysValidTransition(targetState);
+            targetState.AddTransition(targetToSelfTransition);
+
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
+            fsm.TryAddState(targetState);
+
+            FiniteStateMachine clone = fsm.Clone();
+
+            Assert.NotNull(clone);
+            Assert.IsTrue(clone.name.Contains("Clone"));
+
+            foreach (FsmState state in clone.States)
+            {
+                Assert.IsTrue(state.name.Contains("Clone"));
+            }
+        }
+    }
+
     private static IAssetRepository GivenAnAssetRepository()
     {
         return new NoopAssetRepository();
     }
 
+    private static IUndoRedoUtility GivenAnUndoRedoUtility()
+    {
+        return new NoopUndoRedoUtility();
+    }
+
     private static FsmState GivenAStateBase(string stateName)
     {
         FsmState stateBase = ScriptableObject.CreateInstance<FsmState>();
-        stateBase.Init(stateName);
+        stateBase.StateName = stateName;
         return stateBase;
     }
 
     private static NoopFsmState GivenANoopInitializedState(string stateName)
     {
         NoopFsmState state = ScriptableObject.CreateInstance<NoopFsmState>();
-        state.Init(stateName);
+        state.StateName = stateName;
         return state;
     }
 
@@ -565,21 +600,26 @@ public class FsmTest
     private static CounterFsmState GivenACounterInitializedState(string stateName)
     {
         CounterFsmState state = ScriptableObject.CreateInstance<CounterFsmState>();
-        state.Init(stateName);
+        state.StateName = stateName;
+        state.Transitions = new List<FsmTransition>();
         return state;
     }
 
     private static FsmTransition GivenAnAlwaysValidTransition(FsmState state)
     {
         AlwaysValidTransition transition = ScriptableObject.CreateInstance<AlwaysValidTransition>();
-        transition.Init(state);
+        transition.TransitionName = typeof(AlwaysValidTransition).Name;
+        transition.NextState = state;
+        transition.TransitionType = FsmTransitionType.ValidTransition;
         return transition;
     }
 
     private static FsmTransition GivenAnAlwaysInvalidTransition(FsmState state)
     {
         AlwaysInvalidTransition transition = ScriptableObject.CreateInstance<AlwaysInvalidTransition>();
-        transition.Init(state);
+        transition.TransitionName = typeof(AlwaysInvalidTransition).Name;
+        transition.NextState = state;
+        transition.TransitionType = FsmTransitionType.InvalidTransition;
         return transition;
     }
 

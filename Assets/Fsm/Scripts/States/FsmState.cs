@@ -1,5 +1,4 @@
 ﻿using Fsm.State.Transition;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,13 +11,8 @@ namespace Fsm.State
         public List<FsmTransition> Transitions;
         public string Guid;
         public Vector2 Position;
-
-        // TODO: Esto lo estamos usando solo para los tests
-        public void Init(string stateName)
-        {
-            StateName = stateName;
-            Transitions = new List<FsmTransition>();
-        }
+        public FsmStateCondition StateCondition;
+        public string Description;
 
         public void AddTransition(FsmTransition transition)
         {
@@ -55,14 +49,23 @@ namespace Fsm.State
             return hasTransition;
         }
 
-        public virtual void Enter() { }
-        public virtual void Exit() { }
+        public virtual void Enter()
+        {
+            StateCondition = FsmStateCondition.Running;
+        }
 
-        // TODO: not tested
+        public virtual void Exit()
+        {
+            StateCondition = FsmStateCondition.Idle;
+        }
+
         public virtual FsmState Clone()
         {
             FsmState clone = ScriptableObject.Instantiate(this);
-            Transitions.ForEach(transition => clone.AddTransition(transition.Clone()));
+            
+            // Clone all transitions
+            clone.Transitions = new List<FsmTransition>();
+            this.Transitions.ForEach(transition => clone.AddTransition(transition.Clone()));
             return clone;
         }
 

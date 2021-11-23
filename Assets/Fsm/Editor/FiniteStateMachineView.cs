@@ -7,6 +7,8 @@ using Fsm.Repository;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Fsm.Utility;
+using UnityEngine;
 
 // TODO: add namespace
 public class FiniteStateMachineView : GraphView
@@ -16,6 +18,7 @@ public class FiniteStateMachineView : GraphView
 
     private FiniteStateMachine _fsm;
     private IAssetRepository _assetRepository;
+    private IUndoRedoUtility _undoRedoUtility;
 
     public FiniteStateMachineView()
     {
@@ -30,6 +33,15 @@ public class FiniteStateMachineView : GraphView
         styleSheets.Add(styleSheet);
 
         _assetRepository = new UnityAssetRepository();
+        _undoRedoUtility = new UnityUndoRedoUtility();
+
+        Undo.undoRedoPerformed += OnUndoRedo;
+    }
+
+    private void OnUndoRedo()
+    {
+        PopulateView(_fsm);
+        AssetDatabase.SaveAssets();
     }
 
     internal void PopulateView(FiniteStateMachine fsm)
@@ -126,6 +138,11 @@ public class FiniteStateMachineView : GraphView
 
     private void CreateState(System.Type stateType)
     {
+        if (Application.isPlaying)
+        {
+            return;
+        }
+
         if (_fsm.TryCreateState(stateType, out FsmState state))
         {
             CreateStateView(state);
@@ -139,5 +156,12 @@ public class FiniteStateMachineView : GraphView
             endPort.node != startPort.node).ToList();
     }
 
-
+    public void UpdateStates()
+    {
+        nodes.ForEach(node => 
+        {
+            StateView stateView = node as StateView;
+            stateView.UpdateState();
+        });
+    }
 }
