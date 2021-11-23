@@ -7,6 +7,7 @@ using System;
 using Fsm.Repository;
 using System.Collections.Generic;
 using Fsm.Utility;
+using Fsm.Executor;
 
 public class FsmTest
 {
@@ -355,6 +356,7 @@ public class FsmTest
 
             Assert.True(fsm.ActiveState.IsEquals(stateB));
         }
+
     }
 
     public class TryAddTransitionTests
@@ -365,8 +367,8 @@ public class FsmTest
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
 
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("ToState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("ToState");
 
             fsm.TryAddState(fromState);
             fsm.TryAddState(toState);
@@ -383,8 +385,8 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("ToState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("ToState");
 
             Assert.False(fsm.TryAddTransition(fromState, toState));
             Assert.False(fsm.HasTransition(fromState, toState));
@@ -398,8 +400,8 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("ToState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("ToState");
 
             fsm.TryAddState(fromState);
 
@@ -415,8 +417,8 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("ToState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("ToState");
 
             fsm.TryAddState(toState);
             fsm.TryAddTransition(fromState, toState);
@@ -432,8 +434,8 @@ public class FsmTest
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
 
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("ToState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("ToState");
 
             Assert.False(fsm.TryAddTransition(fromState, toState));
 
@@ -450,8 +452,8 @@ public class FsmTest
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
 
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("toState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("toState");
 
             fsm.TryAddState(fromState);
             fsm.TryAddState(toState);
@@ -469,8 +471,8 @@ public class FsmTest
         public void TryRemoveTransition_And_ToState_Does_Not_Exits_Retuns_False()
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("toState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("toState");
 
             fsm.TryAddState(fromState);
             fsm.TryAddTransition(fromState, toState);
@@ -485,8 +487,8 @@ public class FsmTest
         public void TryRemoveTransition_And_FromState_Does_Not_Exits_Retuns_False()
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("toState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("toState");
 
             fsm.TryAddState(toState);
             fsm.TryAddTransition(fromState, toState);
@@ -501,8 +503,8 @@ public class FsmTest
         public void TryRemoveTransition_For_An_Empty_StateMachine_Retuns_False()
         {
             FiniteStateMachine fsm = new FiniteStateMachine();
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("toState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("toState");
 
             fsm.TryAddTransition(fromState, toState);
 
@@ -521,8 +523,8 @@ public class FsmTest
             FiniteStateMachine fsm = new FiniteStateMachine();
             fsm.AssetRepository = GivenAnAssetRepository();
 
-            FsmState fromState = GivenAStateBase("FromState");
-            FsmState toState = GivenAStateBase("toState");
+            FsmState fromState = GivenAFsmState("FromState");
+            FsmState toState = GivenAFsmState("toState");
 
             fsm.TryAddState(fromState);
             fsm.TryAddState(toState);
@@ -576,17 +578,19 @@ public class FsmTest
         return new NoopUndoRedoUtility();
     }
 
-    private static FsmState GivenAStateBase(string stateName)
+    private static FsmState GivenAFsmState(string stateName)
     {
-        FsmState stateBase = ScriptableObject.CreateInstance<FsmState>();
-        stateBase.StateName = stateName;
-        return stateBase;
+        FsmState state = ScriptableObject.CreateInstance<FsmState>();
+        state.StateName = stateName;
+        state.InternalExecutor = GivenAnInternalStateExecutor();
+        return state;
     }
 
     private static NoopFsmState GivenANoopInitializedState(string stateName)
     {
         NoopFsmState state = ScriptableObject.CreateInstance<NoopFsmState>();
         state.StateName = stateName;
+        state.InternalExecutor = GivenAnInternalStateExecutor();
         return state;
     }
 
@@ -594,7 +598,13 @@ public class FsmTest
     {
         CounterFsmState state = ScriptableObject.CreateInstance<CounterFsmState>();
         state.StateName = stateName;
+        state.InternalExecutor = GivenAnInternalStateExecutor();
         return state;
+    }
+
+    private static IInternalStateExecutor GivenAnInternalStateExecutor()
+    {
+        return new NoopInternalStateExecutor();
     }
 
     private static CounterFsmState GivenACounterInitializedState(string stateName)
@@ -602,6 +612,7 @@ public class FsmTest
         CounterFsmState state = ScriptableObject.CreateInstance<CounterFsmState>();
         state.StateName = stateName;
         state.Transitions = new List<FsmTransition>();
+        state.InternalExecutor = GivenAnInternalStateExecutor();
         return state;
     }
 

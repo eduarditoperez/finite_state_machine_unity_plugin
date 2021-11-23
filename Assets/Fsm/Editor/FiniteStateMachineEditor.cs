@@ -5,7 +5,6 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-// TODO: add namespace
 public class FiniteStateMachineEditor : EditorWindow
 {
     private FiniteStateMachineView _fsmView;
@@ -64,7 +63,7 @@ public class FiniteStateMachineEditor : EditorWindow
             }
             return;
         }
-        
+
         if (fsm && AssetDatabase.CanOpenForEdit(fsm))
         {
             _fsmView.PopulateView(fsm);

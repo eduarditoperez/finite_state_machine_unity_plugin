@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Fsm.State.Transition;
 using UnityEngine;
 using System.Collections.Generic;
+using Fsm.Executor;
 
 namespace Fsm.State.Test
 {
@@ -156,6 +157,22 @@ namespace Fsm.State.Test
                 Assert.AreEqual(expectedState, nextState);
             }
 
+            [Test]
+            public void Update_Calls_Execute_From_InternalExecutor_Only_One_Time()
+            {
+                FsmState expectedState = GivenAnFsmState("expectedState");
+
+                FsmState startState = GivenAnFsmState("startState");
+                startState.AddTransition(GivenAnAlwaysInvalidTransition(startState));
+                startState.AddTransition(GivenAnAlwaysValidTransition(expectedState));
+
+                var internalExecutor = new NoopInternalStateExecutor();
+                startState.InternalExecutor = internalExecutor;
+
+                FsmState nextState = startState.Update();
+
+                Assert.AreEqual(1, internalExecutor.ExecuteCalls);
+            }
         }
 
         public class IsEqualsTests
@@ -251,6 +268,18 @@ namespace Fsm.State.Test
 
                 Assert.AreEqual(FsmStateCondition.Running, fsmState.StateCondition);
             }
+
+            [Test]
+            public void Enter_Executes_Calls_Start_In_InternalStateExecutor_One_Time()
+            {
+                FsmState fsmState = GivenAnFsmState("aState");
+                NoopInternalStateExecutor fsmExecutor = new NoopInternalStateExecutor();
+                fsmState.InternalExecutor = fsmExecutor;
+
+                fsmState.Enter();
+
+                Assert.AreEqual(1, fsmExecutor.StartCalls);
+            }
         }
 
         public class ExitTests
@@ -268,7 +297,7 @@ namespace Fsm.State.Test
             }
 
             [Test]
-            public void Exit__After_Enter_Sets_StateCondition_To_Idle()
+            public void Exit_After_Enter_Sets_StateCondition_To_Idle()
             {
                 FsmState fsmState = GivenAnFsmState("aState");
 
@@ -281,7 +310,18 @@ namespace Fsm.State.Test
                 fsmState.Exit();
 
                 Assert.AreEqual(FsmStateCondition.Idle, fsmState.StateCondition);
+            }
 
+            [Test]
+            public void Exit_Executes_Calls_Stop_In_InternalStateExecutor_One_Time()
+            {
+                FsmState fsmState = GivenAnFsmState("aState");
+                NoopInternalStateExecutor fsmExecutor = new NoopInternalStateExecutor();
+                fsmState.InternalExecutor = fsmExecutor;
+
+                fsmState.Exit();
+
+                Assert.AreEqual(1, fsmExecutor.StopCalls);
             }
         }
 
@@ -292,6 +332,11 @@ namespace Fsm.State.Test
             fsmState.Transitions = new List<FsmTransition>();
             fsmState.Guid = "1234";
             fsmState.Position = Vector2.zero;
+            fsmState.InternalExecutor = new NoopInternalStateExecutor();
+
+            NoopInternalStateExecutor fsmExecutor = new NoopInternalStateExecutor();
+            fsmState.InternalExecutor = fsmExecutor;
+
             return fsmState;
         }
 
@@ -307,6 +352,7 @@ namespace Fsm.State.Test
         {
             NoopFsmState state = ScriptableObject.CreateInstance<NoopFsmState>();
             state.StateName = stateName;
+            state.InternalExecutor = new NoopInternalStateExecutor();
             return state;
         }
 

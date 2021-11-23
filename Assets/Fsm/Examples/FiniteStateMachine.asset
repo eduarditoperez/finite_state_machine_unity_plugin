@@ -142,7 +142,7 @@ MonoBehaviour:
   Transitions:
   - {fileID: -5991405783531502329}
   Guid: dede9a564e189d240be726e3c022b5a6
-  Position: {x: 147.20001, y: 20}
+  Position: {x: 148.20001, y: 20.000004}
   StateCondition: 0
   Description: 
   Message: Hello im a debug log state

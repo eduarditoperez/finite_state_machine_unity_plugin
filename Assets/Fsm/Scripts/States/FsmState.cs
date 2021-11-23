@@ -1,4 +1,5 @@
-﻿using Fsm.State.Transition;
+﻿using Fsm.Executor;
+using Fsm.State.Transition;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,10 +10,19 @@ namespace Fsm.State
     {
         public string StateName;
         public List<FsmTransition> Transitions;
+        [HideInInspector]
         public string Guid;
+        [HideInInspector]
         public Vector2 Position;
         public FsmStateCondition StateCondition;
         public string Description;
+
+        public IInternalStateExecutor InternalExecutor
+        {
+            get => _executor;
+            set => _executor = value;
+        }
+        private IInternalStateExecutor _executor;
 
         public void AddTransition(FsmTransition transition)
         {
@@ -52,10 +62,12 @@ namespace Fsm.State
         public virtual void Enter()
         {
             StateCondition = FsmStateCondition.Running;
+            _executor?.Start();
         }
 
         public virtual void Exit()
         {
+            _executor.Stop();
             StateCondition = FsmStateCondition.Idle;
         }
 
@@ -71,10 +83,13 @@ namespace Fsm.State
 
         public virtual FsmState Update()
         {
+            var result = _executor.Execute();
+
             if (TryGetValidTransition(out FsmTransition validTransition))
             {
                 return validTransition.NextState;
             }
+
             return this;
         }
 

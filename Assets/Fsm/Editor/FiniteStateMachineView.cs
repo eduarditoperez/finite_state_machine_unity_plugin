@@ -10,7 +10,6 @@ using System;
 using Fsm.Utility;
 using UnityEngine;
 
-// TODO: add namespace
 public class FiniteStateMachineView : GraphView
 {
     public new class UxmlFactory : UxmlFactory<FiniteStateMachineView, GraphView.UxmlTraits> { }
