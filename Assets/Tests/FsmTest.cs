@@ -595,6 +595,13 @@ public class FsmTest
             foreach (FsmState state in clone.States)
             {
                 Assert.IsTrue(state.name.Contains("Clone"));
+                foreach (FsmTransition transition in state.Transitions)
+                {
+                    Assert.IsTrue(transition.name.Contains("Clone"));
+                    Assert.IsNotNull(transition.NextState);
+                    Assert.IsTrue(transition.NextState.name.Contains("Clone"));
+                    Assert.IsTrue(clone.States.Contains(transition.NextState));
+                }
             }
         }
     }
