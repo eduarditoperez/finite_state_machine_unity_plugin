@@ -43,7 +43,7 @@ public class FsmTest
             FsmState initialState = GivenANoopInitializedState("initialState");
             FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
 
-            Assert.IsEmpty(fsm.States);
+            Assert.IsNotEmpty(fsm.States);
             Assert.IsNotNull(fsm.InitialState);
             Assert.True(fsm.InitialState.IsEquals(initialState));
         }
@@ -133,14 +133,13 @@ public class FsmTest
         }
 
         [Test]
-        public void RemoveState_Throws_Exception_If_AssetRepository_Is_Null()
+        public void RemoveState_Does_Not_Throws_Exception_If_AssetRepository_Is_Null()
         {
             FiniteStateMachine fsm = GivenAnEmptyFiniteStateMachine();
             fsm.Init(null);
 
             FsmState state = GivenANoopInitializedState("SomeState");
             fsm.TryAddState(state);
-            Assert.Throws<NullReferenceException>(() => fsm.RemoveState(state));
         }
 
         [Test]
@@ -542,19 +541,51 @@ public class FsmTest
     public class CloneTests
     {
         [Test]
-        public void Clone_Clones_An_FSM_With_2_States()
+        public void Clone_Clones_An_FSM_With_1_State_And_No_Transitions()
         {
             CounterFsmState initialState = GivenACounterInitializedState("InitialState");
+
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
+
+            FiniteStateMachine clone = fsm.Clone();
+
+            Assert.NotNull(clone);
+            Assert.IsTrue(clone.name.Contains("Clone"));
+            Assert.IsNotEmpty(clone.States);
+            Assert.IsNull(clone.ActiveState);
+        }
+
+        [Test]
+        public void Clone_Clones_An_FSM_With_Only_A_RootState_And_No_Transitions()
+        {
+            RootState rootState = GivenARootState();
+            FiniteStateMachine fsm = GivenAFiniteStateMachine(rootState);
+            FiniteStateMachine clone = fsm.Clone();
+
+            Assert.NotNull(clone);
+            Assert.IsTrue(clone.name.Contains("Clone"));
+            Assert.IsNotEmpty(clone.States);
+            Assert.IsNotNull(clone.InitialState);
+            Assert.IsNotNull(clone.InitialState.name.Contains("Clone"));
+            Assert.IsNull(clone.ActiveState);
+        }
+
+        [Test]
+        public void Clone_Clones_An_FSM_With_2_States()
+        {
+            RootState rootState = GivenARootState();
             NoopFsmState targetState = GivenANoopInitializedState("TargetState");
 
-            FsmTransition initialToTargetTransition = GivenAnAlwaysValidTransition(targetState);
-            initialState.AddTransition(initialToTargetTransition);
+            FsmTransition rootToTargetTransition = GivenAnAlwaysValidTransition(targetState);
+            rootState.AddTransition(rootToTargetTransition);
 
             FsmTransition targetToSelfTransition = GivenAnAlwaysValidTransition(targetState);
             targetState.AddTransition(targetToSelfTransition);
 
-            FiniteStateMachine fsm = GivenAFiniteStateMachine(initialState);
+            FiniteStateMachine fsm = ScriptableObject.CreateInstance<FiniteStateMachine>();
+            fsm.TryAddState(rootState);
             fsm.TryAddState(targetState);
+            fsm.AssetRepository = GivenAnAssetRepository();
 
             FiniteStateMachine clone = fsm.Clone();
 
@@ -610,6 +641,7 @@ public class FsmTest
     private static CounterFsmState GivenACounterInitializedState(string stateName)
     {
         CounterFsmState state = ScriptableObject.CreateInstance<CounterFsmState>();
+        state.name = stateName;
         state.StateName = stateName;
         state.Transitions = new List<FsmTransition>();
         state.InternalExecutor = GivenAnInternalStateExecutor();
@@ -644,6 +676,15 @@ public class FsmTest
     {
         FiniteStateMachine fsm = ScriptableObject.CreateInstance<FiniteStateMachine>();
         fsm.Init(initialState);
+        fsm.TryAddState(initialState);
         return fsm;
+    }
+
+    private static RootState GivenARootState()
+    {
+        var rootState = ScriptableObject.CreateInstance<RootState>();
+        rootState.name = "RootState";
+        rootState.Transitions = new List<FsmTransition>();
+        return rootState;
     }
 }

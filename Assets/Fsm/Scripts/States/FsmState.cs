@@ -67,23 +67,20 @@ namespace Fsm.State
 
         public virtual void Exit()
         {
-            _executor.Stop();
+            _executor?.Stop();
             StateCondition = FsmStateCondition.Idle;
         }
 
         public virtual FsmState Clone()
         {
-            FsmState clone = ScriptableObject.Instantiate(this);
-            
-            // Clone all transitions
+            var clone = ScriptableObject.Instantiate(this);
             clone.Transitions = new List<FsmTransition>();
-            this.Transitions.ForEach(transition => clone.AddTransition(transition.Clone()));
             return clone;
         }
 
         public virtual FsmState Update()
         {
-            var result = _executor.Execute();
+            var result = _executor?.Execute();
 
             if (TryGetValidTransition(out FsmTransition validTransition))
             {

@@ -224,11 +224,6 @@ namespace Fsm.State.Test
 
                 Assert.IsNotNull(clone);
                 Assert.IsTrue(clone.name.Contains("Clone"));
-
-                foreach (FsmTransition t in clone.Transitions)
-                {
-                    Assert.IsTrue(t.name.Contains("Clone"));
-                }
             }
 
             [Test]
@@ -247,11 +242,6 @@ namespace Fsm.State.Test
 
                 Assert.IsNotNull(clone);
                 Assert.IsTrue(clone.name.Contains("Clone"));
-
-                foreach (FsmTransition t in clone.Transitions)
-                {
-                    Assert.IsTrue(t.name.Contains("Clone"));
-                }
             }
         }
 

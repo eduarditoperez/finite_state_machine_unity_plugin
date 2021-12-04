@@ -89,7 +89,6 @@ namespace Fsm.Core
             return hasTheState;
         }
 
-#if UNITY_EDITOR
         // TODO: replace for TryRemove
         public void RemoveState(FsmState state)
         {
@@ -110,12 +109,12 @@ namespace Fsm.Core
                 {
                     FsmState stateToRemove = States[stateIndex];
                     States.RemoveAt(stateIndex);
-
-                    AssetRepository.RemoveObjectFromAsset(stateToRemove);
+#if UNITY_EDITOR
+                    AssetRepository?.RemoveObjectFromAsset(stateToRemove);
+#endif
                 }
             }
         }
-#endif
 
         public void Start()
         {
@@ -142,7 +141,6 @@ namespace Fsm.Core
             }
         }
 
-#if UNITY_EDITOR
         // TODO: not tested
         public bool TryCreateState(System.Type stateType, out FsmState state)
         {
@@ -153,7 +151,9 @@ namespace Fsm.Core
 
             if (TryAddState(state))
             {
-                AssetRepository.AddObjectToAsset(state, this);
+#if UNITY_EDITOR
+                AssetRepository?.AddObjectToAsset(state, this);
+#endif
                 return true;
             }
 
@@ -161,14 +161,12 @@ namespace Fsm.Core
             state = null;
             return false;
         }
-#endif
 
         // TODO: not tested
         public bool IsEmpty => !IsNotEmpty;
         // TODO: not tested
         public bool IsNotEmpty => States != null && States.Count > 0;
 
-#if UNITY_EDITOR
         public bool TryAddTransition(FsmState fromState, FsmState toState)
         {
             if (IsEmpty)
@@ -193,10 +191,14 @@ namespace Fsm.Core
 
             FsmTransition transition = CreateTransition(typeof(FsmTransition), fromState, toState);
             fromState.AddTransition(transition);
-            AssetRepository.AddObjectToAsset(transition, this);
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                AssetRepository?.AddObjectToAsset(transition, this);
+            }
+#endif
             return true;
         }
-#endif
 
         public bool HasTransition(FsmState fromState, FsmState toState)
         {
@@ -217,7 +219,6 @@ namespace Fsm.Core
             return transitionExists;
         }
 
-#if UNITY_EDITOR
         private FsmTransition CreateTransition(System.Type transitionType, FsmState fromState, State.FsmState toState)
         {
             string transitionName = $"Transition_From_{fromState.GetType().Name}_To_{toState.GetType().Name}";
@@ -251,12 +252,13 @@ namespace Fsm.Core
                 FsmTransition transition = fromState.GetTransitionToState(toState);
                 // TODO: put undo/redo here
                 fromState.RemoveTransition(transition);
-                AssetRepository.RemoveObjectFromAsset(transition);
+#if UNITY_EDITOR
+                AssetRepository?.RemoveObjectFromAsset(transition);
+#endif
                 return true;
             }
             return false;
         }
-#endif
 
         public List<FsmState> GetReachableStates(FsmState state)
         {
@@ -265,10 +267,36 @@ namespace Fsm.Core
 
         public FiniteStateMachine Clone()
         {
-            FiniteStateMachine clone = ScriptableObject.Instantiate(this);
-            clone.States = new List<FsmState>();
-            States.ForEach(state => clone.TryAddState(state.Clone()));
-            return clone;
+            FiniteStateMachine fsmClone = ScriptableObject.Instantiate(this);
+            fsmClone.AssetRepository = AssetRepository;
+            fsmClone.States = new List<FsmState>();
+
+            foreach (FsmState state in States)
+            {
+                FsmState stateClone = state.Clone();
+                if (fsmClone.TryAddState(stateClone))
+                {
+                    // If the cloned stated was added, then add the 
+                    // transitions.
+                    foreach (FsmTransition transition in state.Transitions)
+                    {
+                        // Clone the transition
+                        FsmTransition transitionClone = ScriptableObject.Instantiate(transition);
+                        // Clone the next state of the transitions
+                        transitionClone.NextState = transition.NextState.Clone();
+                        // Add the cloned transition to the cloned state
+                        stateClone.AddTransition(transitionClone);
+                        // If the next state of the transition is not inside
+                        // the cloned fsm, add that cloned state
+                        if (!fsmClone.HasState(transitionClone.NextState))
+                        {
+                            fsmClone.TryAddState(transitionClone.NextState);
+                        }
+                    }
+                }
+            }
+
+            return fsmClone;
         }
     }
 }

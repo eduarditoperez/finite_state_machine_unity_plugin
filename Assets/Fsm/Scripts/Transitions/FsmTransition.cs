@@ -20,11 +20,6 @@ namespace Fsm.State.Transition
         // TODO: should this be setted from outside?
         private ValidatorStrategy _validatorStrategy;
 
-        public virtual FsmTransition Clone()
-        {
-            return ScriptableObject.Instantiate(this);
-        }
-
         private bool IsValidTransition()
         {
             _validatorStrategy = ValidatorStrategyProvider.ProvideStrategy(TransitionType);
